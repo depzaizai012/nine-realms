@@ -2,30 +2,42 @@ import { VFX_CONFIG as T } from "./vfxConfig.js";
 import { VFX_REGISTRY } from "./vfxRegistry.js";
 import { COLORS } from "../../data/elements/index.js";
 import { getEnemyAsset } from "../../data/assets/manifest.js";
+import { createHeroActionVfx } from "./heroActionVfxController.js";
+import { createBoardVfx } from "./boardVfxController.js";
+
 export function createVfx(root, state, boardView) {
   const layer = root.querySelector(".vfx-layer"),
-    actor = (id) => root.querySelector(`[data-actor="${id}"]`);
+    numberLayer = root.querySelector(".number-layer");
+  const actor = (id) => root.querySelector(`[data-actor="${id}"]`);
   const wait = async (ms) => {
     let remaining = ms;
     while (remaining > 0) {
-      await new Promise((r) => setTimeout(r, Math.min(remaining, 25)));
-      if (!state.paused) remaining -= 25 * state.speed;
+      const start = performance.now();
+      await new Promise((r) =>
+        setTimeout(
+          r,
+          state.paused ? T.tick : Math.min(remaining / state.speed, T.tick),
+        ),
+      );
+      if (!state.paused) remaining -= (performance.now() - start) * state.speed;
     }
   };
   const animate = async (el, frames, ms) => {
     if (!el) return;
     const a = el.animate(frames, {
-      duration: ms / state.speed,
+      duration: ms,
       easing: "ease-in-out",
       fill: "none",
     });
-    const interval = setInterval(
-      () =>
-        state.paused || root.classList.contains("hit-stop")
-          ? a.pause()
-          : a.play(),
-      25,
-    );
+    a.playbackRate = state.speed;
+    const update = () => {
+      a.playbackRate = state.speed;
+      if (state.paused || root.classList.contains("hit-stop")) {
+        if (a.playState === "running") a.pause();
+      } else if (a.playState === "paused") a.play();
+    };
+    update();
+    const interval = setInterval(update, T.tick);
     try {
       await a.finished;
     } catch {
@@ -46,15 +58,15 @@ export function createVfx(root, state, boardView) {
         if (a.playState === "paused") a.play();
       });
   }
-  const center = (el) => {
+  const center = (el, relative = root) => {
     const r = el.getBoundingClientRect(),
-      p = root.getBoundingClientRect();
+      p = relative.getBoundingClientRect();
     return {
       x: r.left + r.width / 2 - p.left,
       y: r.top + r.height / 2 - p.top,
     };
   };
-  function effect(cls, x, y, color) {
+  function effect(cls, x, y, color, targetLayer = layer) {
     const el = document.createElement("i");
     el.className = cls;
     Object.assign(el.style, {
@@ -62,10 +74,16 @@ export function createVfx(root, state, boardView) {
       top: `${y}px`,
       "--color": color,
     });
-    layer.append(el);
+    targetLayer.append(el);
     return el;
   }
-  async function number(target, amount, kind = "damage", crit = false) {
+  async function number(
+    target,
+    amount,
+    kind = "damage",
+    crit = false,
+    duration = T.number,
+  ) {
     if (!target) return;
     const p = center(target),
       el = effect(
@@ -73,6 +91,7 @@ export function createVfx(root, state, boardView) {
         p.x,
         p.y,
         kind === "damage" ? "#fff0d5" : "#a0ffc8",
+        numberLayer,
       );
     el.textContent = crit
       ? `CRIT ${amount}!`
@@ -88,81 +107,100 @@ export function createVfx(root, state, boardView) {
         },
         { transform: "translate(-50%,-90%) scale(1)", opacity: 0 },
       ],
-      T.number,
+      duration,
     );
     el.remove();
   }
-  async function particles(el, color, heal = false) {
-    const p = center(el),
-      items = Array.from({ length: heal ? 5 : 8 }, (_, i) => {
+  async function particles(el, color, heal = false, options = {}) {
+    const targetLayer = options.layer || layer,
+      p = center(el, targetLayer),
+      duration = options.duration || T.number,
+      spread = options.spread || 32;
+    await Promise.all(
+      Array.from({ length: options.count || (heal ? 5 : 8) }, (_, i) => {
         const node = effect(
-          heal ? "heal-particle" : "particle",
+          heal === "shield"
+            ? "shield-particle"
+            : heal
+              ? "heal-particle"
+              : `particle ${options.style || ""}`,
           p.x,
           p.y,
           color,
+          targetLayer,
         );
-        if (heal) node.textContent = "+";
+        if (heal) node.textContent = heal === "shield" ? "◇" : "+";
         return animate(
           node,
           [
             { opacity: 1, transform: "translate(0,0) scale(1)" },
             {
               opacity: 0,
-              transform: `translate(${Math.cos(i * 2.4) * 32}px,${Math.sin(i * 2.4) * 25 - 20}px) scale(.2)`,
+              transform: `translate(${Math.cos(i * 2.4) * spread}px,${Math.sin(i * 2.4) * spread * 0.8 - 20}px) scale(.2)`,
             },
           ],
-          T.number,
+          duration,
         ).then(() => node.remove());
-      });
-    await Promise.all(items);
+      }),
+    );
   }
-  async function hit(target, event) {
+  async function hit(target, event, options = {}) {
     if (!target) return;
-    void number(target, event.amount, event.kind, event.crit);
+    if (options.number !== false)
+      void number(target, event.amount, event.kind, event.crit);
+    const duration = options.duration || T.hit;
     if (event.kind === "heal" || event.kind === "shield") {
-      void particles(
-        target,
-        event.element === "LIGHT" ? "#ffe5a2" : "#9affbe",
-        true,
-      );
+      const color =
+        event.kind === "shield"
+          ? "#e2c581"
+          : event.element === "LIGHT"
+            ? "#ffe5a2"
+            : "#9affbe";
+      void particles(target, color, event.kind === "shield" ? "shield" : true, {
+        duration: T.ultimateParticle,
+      });
       await animate(
         target,
         [
           { filter: "brightness(1)", boxShadow: "0 0 0 transparent" },
-          { filter: "brightness(1.5)", boxShadow: "0 0 22px #7dffba" },
+          { filter: "brightness(1.5)", boxShadow: `0 0 22px ${color}` },
           { filter: "brightness(1)" },
         ],
-        T.heroAttack,
+        duration,
       );
       return;
     }
+    const base = target.style.transform || "",
+      color = target.classList.contains("hero-card")
+        ? "#e95c55"
+        : COLORS[event.element];
     await animate(
       target,
       [
-        { filter: "brightness(1)", transform: "translateX(0)" },
+        { filter: "brightness(1)", transform: `${base} translateX(0)` },
         {
-          filter: "brightness(3) drop-shadow(0 0 7px #e95c55)",
-          transform: "translateX(-3px)",
+          filter: `brightness(3) drop-shadow(0 0 7px ${color})`,
+          transform: `${base} translateX(-3px)`,
           offset: 0.2,
         },
         {
           filter: "brightness(1.3)",
-          transform: "translateX(3px)",
+          transform: `${base} translateX(3px)`,
           offset: 0.4,
         },
-        { filter: "brightness(1)", transform: "translateX(0)" },
+        { filter: "brightness(1)", transform: `${base} translateX(0)` },
       ],
-      T.heroAttack,
+      duration,
     );
   }
-  async function attack(event) {
+  async function attack(event, onImpact = () => {}) {
+    const enemy = state.enemies.find((e) => e.uid === event.source);
+    if (!enemy) return heroVfx.attack(event, onImpact);
     const from = actor(event.source),
       to = actor(event.target);
     if (!from || !to) return;
-    const enemy = state.enemies.find((e) => e.uid === event.source),
-      duration = enemy ? T.enemyAttack : T.heroAttack;
-    const img = enemy && from.querySelector("img");
-    if (img) img.src = getEnemyAsset(enemy.assetId, "attack");
+    const img = from.querySelector("img");
+    img.src = getEnemyAsset(enemy.assetId, "attack");
     await animate(
       from,
       [
@@ -170,7 +208,7 @@ export function createVfx(root, state, boardView) {
         { filter: "brightness(1.6)", transform: "scale(1.06)" },
         { filter: "brightness(1)", transform: "scale(1)" },
       ],
-      duration * 0.25,
+      T.enemyAttack * 0.25,
     );
     const a = center(from),
       b = center(to),
@@ -190,18 +228,18 @@ export function createVfx(root, state, boardView) {
           offset: 0.15,
         },
         {
-          transform: `translate(${b.x - a.x}px,${b.y - a.y}px) scale(1.2)`,
+          transform: `translate(calc(-50% + ${b.x - a.x}px),calc(-50% + ${b.y - a.y}px)) scale(1.2)`,
           opacity: 1,
         },
       ],
-      duration * 0.5,
+      T.enemyAttack * 0.5,
     );
     projectile.remove();
     void particles(to, COLORS[event.element]);
     await hitStop(event.crit ? T.critStop : T.hitStop);
-    if (event.crit) await shake();
     await hit(to, event);
-    if (img) img.src = getEnemyAsset(enemy.assetId, "idle");
+    onImpact();
+    img.src = getEnemyAsset(enemy.assetId, "idle");
   }
   async function death(id) {
     const el = actor(id);
@@ -253,109 +291,6 @@ export function createVfx(root, state, boardView) {
       ),
     ]);
   }
-  async function special(activation, clear) {
-    const cell = boardView.cells[activation.index],
-      p = center(cell),
-      type = activation.type,
-      color = COLORS[activation.element] || "#e5b8ff";
-    await animate(
-      cell,
-      [
-        { filter: "brightness(1)", transform: "scale(1)" },
-        { filter: "brightness(3)", transform: "scale(1.2)" },
-        { filter: "brightness(1)", transform: "scale(1)" },
-      ],
-      T.clear,
-    );
-    if (type.startsWith("LINE")) {
-      const beam = effect(
-        `beam ${type === "LINE_HORIZONTAL" ? "horizontal" : "vertical"}`,
-        p.x,
-        p.y,
-        color,
-      );
-      await animate(
-        beam,
-        [
-          { opacity: 0, transform: "translate(-50%,-50%) scale(.1)" },
-          {
-            opacity: 1,
-            transform: "translate(-50%,-50%) scale(1)",
-            offset: 0.35,
-          },
-          { opacity: 0, transform: "translate(-50%,-50%) scale(1.1)" },
-        ],
-        T.line,
-      );
-      beam.remove();
-    } else if (type === "BOMB") {
-      const ring = effect("explosion", p.x, p.y, "#ffd37c");
-      void shake();
-      await hitStop(T.bombStop);
-      await animate(
-        ring,
-        [
-          { opacity: 1, transform: "translate(-50%,-50%) scale(.1)" },
-          { opacity: 0, transform: "translate(-50%,-50%) scale(2)" },
-        ],
-        T.bomb,
-      );
-      ring.remove();
-    } else {
-      const rays = clear.map((i) => {
-        const q = center(boardView.cells[i]),
-          ray = effect("prism-ray", p.x, p.y, "#eed6ff");
-        ray.style.width = `${Math.hypot(q.x - p.x, q.y - p.y)}px`;
-        ray.style.transform = `rotate(${Math.atan2(q.y - p.y, q.x - p.x)}rad)`;
-        return ray;
-      });
-      await animate(
-        cell,
-        [
-          { filter: "hue-rotate(0deg) brightness(2)" },
-          { filter: "hue-rotate(360deg) brightness(3)" },
-        ],
-        T.prism,
-      );
-      rays.forEach((el) => el.remove());
-    }
-    void particles(cell, color);
-  }
-  async function clear(step) {
-    for (const a of step.activations) await special(a, step.clear);
-    await Promise.all(
-      step.clear.map((i) =>
-        animate(
-          boardView.cells[i],
-          [
-            { filter: "brightness(1)", transform: "scale(1)", opacity: 1 },
-            {
-              filter: "brightness(3)",
-              transform: "scale(1.12)",
-              opacity: 1,
-              offset: 0.3,
-            },
-            { filter: "brightness(1)", transform: "scale(.1)", opacity: 0 },
-          ],
-          T.clear,
-        ),
-      ),
-    );
-  }
-  async function fall() {
-    await Promise.all(
-      boardView.cells.map((el) =>
-        animate(
-          el,
-          [
-            { transform: "translateY(-16px)", opacity: 0.3 },
-            { transform: "translateY(0)", opacity: 1 },
-          ],
-          T.fall,
-        ),
-      ),
-    );
-  }
   async function shake() {
     await animate(
       root.querySelector(".visual-root"),
@@ -368,6 +303,23 @@ export function createVfx(root, state, boardView) {
       T.clear,
     );
   }
+  const ctx = {
+    root,
+    state,
+    boardView,
+    actor,
+    wait,
+    animate,
+    center,
+    effect,
+    number,
+    particles,
+    hit,
+    hitStop,
+    shake,
+  };
+  const heroVfx = createHeroActionVfx(ctx),
+    boardVfx = createBoardVfx(ctx);
   return {
     wait,
     animate,
@@ -375,9 +327,11 @@ export function createVfx(root, state, boardView) {
     hit,
     death,
     swap,
-    clear,
-    fall,
+    clear: boardVfx.clear,
+    fall: boardVfx.fall,
     number,
     shake,
+    ultimate: heroVfx.ultimate,
+    ultimateImpact: heroVfx.ultimateImpact,
   };
 }

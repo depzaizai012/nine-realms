@@ -25,10 +25,63 @@ export function installAssetFallbacks(root) {
 }
 function asset(key) {
   if (MANIFEST[key]) return MANIFEST[key];
-  if (import.meta.env.DEV) console.warn(`Missing asset: ${key}.png`);
+  if (import.meta.env?.DEV) console.warn(`Missing asset: ${key}.png`);
   return fallback;
 }
 export const getHeroAsset = (id, type) => asset(`${id}_${type.toUpperCase()}`);
+// The supplied LINE_H art is vertical and LINE_V art is horizontal.
+// Keep canonical IDs/filenames and orient each overlay to its logical direction.
+export const getGemSpecialRotation = (type) =>
+  ["LINE_HORIZONTAL", "LINE_VERTICAL"].includes(type) ? 90 : 0;
+const ULTIMATE_ASSET_ORDER = [
+  "full_body",
+  "ultimate_cutin",
+  "battle_cutin",
+  "avatar",
+];
+const warnedUltimateAssets = new Set();
+export function getHeroUltimateAssets(id, { warn = true } = {}) {
+  const candidates = [];
+  for (const type of ULTIMATE_ASSET_ORDER) {
+    const key = `${id}_${type.toUpperCase()}`;
+    if (MANIFEST[key]) candidates.push({ url: MANIFEST[key], type, key });
+    else if (warn && import.meta.env?.DEV && !warnedUltimateAssets.has(key)) {
+      console.warn(
+        `Missing ultimate asset: ${key}.png; trying the next production asset.`,
+      );
+      warnedUltimateAssets.add(key);
+    }
+    // Only warn for the missing assets above the first available choice.
+    if (candidates.length) warn = false;
+  }
+  return candidates.length
+    ? candidates
+    : [
+        {
+          url: getHeroAsset(id, "avatar"),
+          type: "avatar",
+          key: `${id}_AVATAR`,
+        },
+      ];
+}
+export const getHeroUltimateAsset = (id, options) =>
+  getHeroUltimateAssets(id, options)[0];
+export async function loadHeroUltimateAsset(id) {
+  for (const candidate of getHeroUltimateAssets(id)) {
+    const loaded = await new Promise((resolve) => {
+      const image = new Image();
+      image.onload = () => resolve(true);
+      image.onerror = () => resolve(false);
+      image.src = candidate.url;
+    });
+    if (loaded) return candidate;
+    if (import.meta.env.DEV)
+      console.warn(
+        `Failed ultimate asset: ${candidate.url}; trying the next production asset.`,
+      );
+  }
+  return { url: fallback, type: "avatar", key: `${id}_AVATAR` };
+}
 export const getEnemyAsset = (id, state = "idle") =>
   asset(`${id}_${state.toUpperCase()}`);
 export const getBossAsset = (id, phase) =>
@@ -56,6 +109,7 @@ export function stageAssets(id = "1-1") {
   return [
     ...new Set([
       ...s.team.map((h) => getHeroAsset(h, "avatar")),
+      ...s.team.map((h) => getHeroUltimateAsset(h, { warn: false }).url),
       ...s.waves
         .flat()
         .flatMap((e) => ["idle", "attack"].map((t) => getEnemyAsset(e.id, t))),

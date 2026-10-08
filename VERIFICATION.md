@@ -1,5 +1,7 @@
 # Stage 1-1 acceptance report
 
+This is the original vertical-slice report for checkpoint `cbd6479`. See [POLISH_REPORT.md](POLISH_REPORT.md) for the current presentation changes, 24-asset preload and expanded test results.
+
 Built from scratch on October 8, 2026 using Vite, HTML, CSS and vanilla JavaScript ES modules. The supplied production art was reused; starter implementation files were removed.
 
 | #   | Requested result              | Evidence                                                                                                                                                                                                                                                                                                                                                       |

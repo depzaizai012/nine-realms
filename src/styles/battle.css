@@ -15,6 +15,8 @@
   padding-top: env(safe-area-inset-top);
 }
 .top-hud {
+  position: relative;
+  z-index: 50;
   height: 70px;
   flex-shrink: 0;
   display: flex;
@@ -59,7 +61,7 @@ h1 {
   font-size: 13px;
   font-weight: 400;
 }
-.speed,
+.auto-control,
 .pause {
   width: 27px;
   height: 30px;
@@ -67,6 +69,24 @@ h1 {
   border: 1px solid #89744766;
   border-radius: 5px;
   font: 12px system-ui;
+}
+.auto-control {
+  width: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  font: 8px system-ui;
+  letter-spacing: 0.7px;
+  color: #cbb784;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+.auto-control small {
+  font: 7px system-ui;
+  letter-spacing: 1px;
+  color: #93aa97;
 }
 .combat {
   position: relative;
@@ -225,6 +245,9 @@ h1 {
   pointer-events: none;
 }
 .party {
+  position: relative;
+  z-index: 10;
+  overflow: visible;
   display: flex;
   gap: 3px;
   justify-content: center;
@@ -234,6 +257,7 @@ h1 {
   background: linear-gradient(#142d22, #081a13);
 }
 .hero-card {
+  transform-origin: center bottom;
   width: calc((100% - 12px) / 5);
   max-width: 74px;
   min-width: 0;
@@ -243,6 +267,26 @@ h1 {
   padding: 3px;
   position: relative;
   height: 116px;
+}
+.hero-acting {
+  z-index: 3;
+  border-color: var(--action-color);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--action-color) 65%, transparent);
+}
+.ultimate-caster {
+  z-index: 3;
+  border-color: #ffe4a2;
+  box-shadow: 0 0 20px #f6d785cc;
+}
+.ultimate-caster .avatar {
+  box-shadow: 0 0 16px #ffe396;
+  filter: brightness(1.2);
+}
+.ultimate-active .enemy:not(.ultimate-focus) {
+  opacity: 0.45;
+}
+.ultimate-focus {
+  z-index: 3;
 }
 .avatar-wrap {
   position: relative;
@@ -306,6 +350,7 @@ h1 {
   opacity: 0.45;
 }
 .board-shell {
+  z-index: 4;
   position: relative;
   width: calc(100% - 8px);
   aspect-ratio: 1.08;

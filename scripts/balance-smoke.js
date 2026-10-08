@@ -12,6 +12,14 @@ const vfx = {
   death: noop,
   hit: noop,
   attack: noop,
+  ultimate: async (_hero, resolve) => {
+    const feedback = await resolve();
+    await feedback.finished;
+  },
+  ultimateImpact: async (_events, render) => {
+    render();
+    return { finished: Promise.resolve() };
+  },
 };
 const view = {
   render() {},

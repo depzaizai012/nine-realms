@@ -52,7 +52,12 @@ test("mobile layouts, production art, target, drag, pause and hints", async ({
   expect(await page.evaluate(() => window.__battle.state.selected)).toBe(
     "w0-1",
   );
-  await page.locator(".speed").click();
+  await expect(page.locator(".speed")).toHaveCount(0);
+  await expect(page.locator(".auto-control")).toContainText("AUTO");
+  await expect(page.locator(".auto-control")).toBeDisabled();
+  expect(
+    await page.evaluate(() => window.__battle.state.autoBattleEnabled),
+  ).toBe(false);
   await page.locator(".pause").click();
   await expect(page.locator(".pause-dialog")).toBeVisible();
   await page.locator(".resume").click();

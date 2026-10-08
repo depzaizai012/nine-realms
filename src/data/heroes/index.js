@@ -71,6 +71,13 @@ export const HEROES = Object.fromEntries(
         baseStats: { hp: s[5], atk: s[6] },
         attackVfx: s[7],
         ultimate: s[8],
+        ultimateName: [
+          "Verdant Benediction",
+          "Emberfall Cleave",
+          "Stonebound Aegis",
+          "Nether Bloom",
+          "Celestial Renewal",
+        ][i],
       },
     ];
   }),

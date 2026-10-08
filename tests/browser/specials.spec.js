@@ -5,7 +5,7 @@ async function observeEffects(page) {
     window.__animations = [];
     const original = Element.prototype.animate;
     Element.prototype.animate = function (frames, options) {
-      if (this.closest(".vfx-layer"))
+      if (this.closest(".vfx-layer,.number-layer,.board-vfx-layer"))
         window.__animations.push({
           className: this.className,
           frames: frames.length,
@@ -22,7 +22,10 @@ async function observeEffects(page) {
                 .getAnimations()
                 .flatMap((a) => a.effect.getKeyframes()).length,
             });
-    }).observe(document.querySelector(".vfx-layer"), { childList: true });
+    }).observe(document.querySelector(".game"), {
+      childList: true,
+      subtree: true,
+    });
   });
 }
 async function sawEffect(page, cls) {
@@ -174,7 +177,7 @@ test("line beams, bomb explosion, prism rays, chain, death and heal particles", 
   await page.waitForFunction(() => window.__deathDone);
   await expect(page.locator('[data-actor="w0-0"]')).toHaveCount(0);
 });
-test("stage preloader requests only its 19 production assets with zero missing files", async ({
+test("stage preloader requests only its 24 production assets with zero missing files", async ({
   page,
 }) => {
   await page.goto("/");
@@ -192,14 +195,14 @@ test("stage preloader requests only its 19 production assets with zero missing f
       ).filter((r) => r.status !== 200),
       unused: [...performance.getEntriesByType("resource")]
         .filter((r) =>
-          /ULTIMATE_CUTIN|PORTRAIT|FULL_BODY|THORN_WOLF|THORNHEART|WOOD_TEMPLE/.test(
+          /PORTRAIT|BATTLE_CUTIN|THORN_WOLF|THORNHEART|WOOD_TEMPLE/.test(
             r.name,
           ),
         )
         .map((r) => r.name),
     };
   });
-  expect(audit.count).toBe(19);
+  expect(audit.count).toBe(24);
   expect(audit.detected).toBe(56);
   expect(audit.failed).toEqual([]);
   expect(audit.unused).toEqual([]);

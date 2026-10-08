@@ -18,11 +18,32 @@ import { createEnemyView } from "../components/enemy/enemyView.js";
 import { createVfx } from "../core/vfx/battleVfxController.js";
 import { attachInput } from "../core/match3/inputController.js";
 import { createHints } from "../core/match3/hintController.js";
+import { createAutoBattleAdapter } from "../core/battle/autoBattleAdapter.js";
 export function mountBattle(app, stageId = "1-1") {
   const stage = STAGES[stageId],
     state = createBattle(stage);
   let controller, messageTimer;
-  app.innerHTML = `<main class="game" aria-label="Legend of the Nine Realms"><div class="visual-root"><header class="top-hud"><img class="realm-icon" src="${getRealmIcon(stage.realm)}" alt="${REALMS.find((r) => r.id === stage.realm)?.name}"><div class="stage-label"><span>STAGE ${stage.id}</span><h1>${stage.name}</h1></div><div class="wave-label"><span>WAVE</span><b id="wave">1 / ${stage.waves.length}</b></div><button class="speed" aria-label="Toggle double speed">×1</button><button class="pause" aria-label="Pause battle">Ⅱ</button></header><section class="combat" style="background-image:url('${getBattleBackground(stage.background)}')"><div class="enemy-hud"><img class="enemy-icon" alt=""><div><div class="enemy-heading"><b class="enemy-name"></b><span class="enemy-hp-text"></span></div><div class="bar enemy-hp"><i class="trail"></i><i class="fill"></i></div></div></div><div class="location">${REALMS.find((r) => r.id === stage.realm)?.name.toUpperCase()} <span>•</span> ${stage.subtitle}</div><div class="enemy-field"></div><div class="combat-vignette"></div></section><section class="party" aria-label="Heroes"></section><section class="board-shell"><img class="board-frame" src="${getRealmBoardFrame(stage.realm)}" alt=""><div class="board" role="grid" aria-label="Match three board"></div></section><footer><span>NINE REALMS</span><span>Swipe to match · Tap a hero for an ultimate</span></footer></div><div class="vfx-layer" aria-hidden="true"></div><div class="toast" role="status"></div><dialog class="pause-dialog"><div class="dialog-mark">✦</div><p>NINE REALMS</p><h2>A moment of stillness</h2><p>Your journey will be here.</p><button class="resume primary">Resume journey</button><button class="restart">Restart stage</button></dialog><dialog class="result-dialog"></dialog></main>`;
+  app.innerHTML = `<main class="game" aria-label="Legend of the Nine Realms">
+    <div class="visual-root">
+      <header class="top-hud">
+        <img class="realm-icon" src="${getRealmIcon(stage.realm)}" alt="${REALMS.find((r) => r.id === stage.realm)?.name}">
+        <div class="stage-label"><span>STAGE ${stage.id}</span><h1>${stage.name}</h1></div>
+        <div class="wave-label"><span>WAVE</span><b id="wave">1 / ${stage.waves.length}</b></div>
+        <button class="auto-control" disabled aria-pressed="false" aria-label="Auto battle off, coming soon" title="Auto Battle is coming soon"><span>AUTO</span><small>OFF</small></button>
+        <button class="pause" aria-label="Pause battle">Ⅱ</button>
+      </header>
+      <section class="combat" style="background-image:url('${getBattleBackground(stage.background)}')">
+        <div class="enemy-hud"><img class="enemy-icon" alt=""><div><div class="enemy-heading"><b class="enemy-name"></b><span class="enemy-hp-text"></span></div><div class="bar enemy-hp"><i class="trail"></i><i class="fill"></i></div></div></div>
+        <div class="location">${REALMS.find((r) => r.id === stage.realm)?.name.toUpperCase()} <span>•</span> ${stage.subtitle}</div>
+        <div class="enemy-field"></div><div class="combat-vignette"></div>
+      </section>
+      <section class="party" aria-label="Heroes"></section>
+      <section class="board-shell"><img class="board-frame" src="${getRealmBoardFrame(stage.realm)}" alt=""><div class="board" role="grid" aria-label="Match three board"></div><div class="board-vfx-layer" aria-hidden="true"></div></section>
+      <footer><span>NINE REALMS</span><span>Swipe to match · Tap a hero for an ultimate</span></footer>
+    </div>
+    <div class="vfx-layer" aria-hidden="true"></div><div class="number-layer" aria-hidden="true"></div><div class="toast" role="status"></div>
+    <dialog class="pause-dialog"><div class="dialog-mark">✦</div><p>NINE REALMS</p><h2>A moment of stillness</h2><p>Your journey will be here.</p><button class="resume primary">Resume journey</button><button class="restart">Restart stage</button></dialog><dialog class="result-dialog"></dialog>
+  </main>`;
   const theme = BOARD_THEMES[stage.realm] || DEFAULT_BOARD_THEME;
   const boardRoot = app.querySelector(".board");
   for (const [key, value] of Object.entries(theme.inner))
@@ -48,6 +69,10 @@ export function mountBattle(app, stageId = "1-1") {
     enemies,
     actor,
     message,
+    dismissMessage() {
+      clearTimeout(messageTimer);
+      root.querySelector(".toast").classList.remove("visible");
+    },
     render(s) {
       heroes.render(s.heroes);
       enemies.render(s);
@@ -76,6 +101,7 @@ export function mountBattle(app, stageId = "1-1") {
   };
   const vfx = createVfx(root, state, board);
   controller = createBattleController(state, view, vfx);
+  const auto = createAutoBattleAdapter(state, controller);
   board.render(state.board);
   enemies.spawn(state.enemies);
   controller.render();
@@ -86,10 +112,6 @@ export function mountBattle(app, stageId = "1-1") {
     interact: hints.reset,
   });
   root.addEventListener("pointerdown", hints.reset);
-  root.querySelector(".speed").onclick = (e) => {
-    state.speed = state.speed === 1 ? 2 : 1;
-    e.currentTarget.textContent = `×${state.speed}`;
-  };
   const pause = root.querySelector(".pause-dialog");
   root.querySelector(".pause").onclick = () => {
     state.paused = true;
@@ -108,6 +130,6 @@ export function mountBattle(app, stageId = "1-1") {
   });
   message("Swipe adjacent gems to match three");
   if (import.meta.env.DEV)
-    window.__battle = { state, controller, view, vfx, hints };
-  return { state, controller };
+    window.__battle = { state, controller, view, vfx, hints, auto };
+  return { state, controller, auto };
 }

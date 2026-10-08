@@ -1,9 +1,23 @@
-.vfx-layer {
+.vfx-layer,
+.number-layer {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 20;
+  z-index: 8;
   overflow: hidden;
+}
+.number-layer {
+  z-index: 35;
+}
+.board-vfx-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+}
+.ultimate-active .vfx-layer {
+  z-index: 28;
 }
 .hit-stop .enemy img,
 .hit-stop .target-ring {
@@ -27,10 +41,138 @@
   height: 25px;
 }
 .projectile.slash {
-  width: 38px;
-  height: 9px;
+  width: 56px;
+  height: 11px;
   border-radius: 50%;
   box-shadow: 0 0 15px var(--color);
+}
+.projectile.void-bolt {
+  background: radial-gradient(circle, #ecbdff, #9736cd 45%, #160925 70%);
+  box-shadow: 0 0 15px 5px #994cd3;
+}
+.projectile.star-bolt {
+  width: 24px;
+  height: 24px;
+  clip-path: polygon(
+    50% 0,
+    61% 35%,
+    100% 50%,
+    62% 63%,
+    50% 100%,
+    36% 64%,
+    0 50%,
+    35% 35%
+  );
+  background: linear-gradient(#fff, #ffe18c);
+}
+.projectile.empowered {
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 0 28px 10px var(--color);
+}
+.projectile.slash.empowered {
+  width: 118px;
+  height: 23px;
+}
+.charge-fragment,
+.attack-trail {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  pointer-events: none;
+  background: var(--color);
+  box-shadow: 0 0 9px var(--color);
+  border-radius: 50%;
+}
+.charge-fragment.leaf,
+.attack-trail.leaf,
+.particle.leaf {
+  width: 10px;
+  height: 5px;
+  border-radius: 100% 0 100% 0;
+  background: #a7ffaf;
+}
+.charge-fragment.ember,
+.attack-trail.ember,
+.particle.ember {
+  background: linear-gradient(#fff2a1, #ff7d2e);
+  width: 4px;
+  height: 9px;
+  border-radius: 60% 0;
+}
+.charge-fragment.dust,
+.attack-trail.dust,
+.particle.dust {
+  background: #ddb784;
+  border-radius: 1px;
+  transform: rotate(30deg);
+  box-shadow: none;
+}
+.charge-fragment.void,
+.attack-trail.void,
+.particle.void {
+  background: #1e0b35;
+  border: 1px solid #c27bfd;
+  box-shadow: 0 0 7px #9751d6;
+}
+.charge-fragment.sparkle,
+.attack-trail.sparkle,
+.particle.sparkle {
+  background: #fff4c1;
+  clip-path: polygon(
+    50% 0,
+    65% 35%,
+    100% 50%,
+    65% 65%,
+    50% 100%,
+    35% 65%,
+    0 50%,
+    35% 35%
+  );
+  width: 11px;
+  height: 11px;
+}
+.attack-trail.empowered {
+  width: 13px;
+  height: 13px;
+}
+.particle.poison {
+  background: #b9e486;
+  border: 1px solid #d99fff;
+  box-shadow: 0 0 8px #ae69e5;
+  border-radius: 50%;
+}
+.element-impact {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border: 2px solid var(--color);
+  border-radius: 50%;
+  box-shadow:
+    0 0 13px var(--color),
+    inset 0 0 13px var(--color);
+}
+.element-impact.fire {
+  background: radial-gradient(circle, #fff4a8, #ff773b88, transparent);
+  border-width: 3px;
+}
+.element-impact.earth {
+  border-style: dashed;
+  border-width: 5px;
+  box-shadow: none;
+}
+.element-impact.dark {
+  background: radial-gradient(circle, #09040f, #aa68e888, transparent);
+  border-color: #b57aed;
+}
+.element-impact.light {
+  background: radial-gradient(circle, #fffbe0, #ffe49766, transparent);
+}
+.element-impact.empowered {
+  width: 102px;
+  height: 102px;
+  border-width: 5px;
+  box-shadow: 0 0 25px var(--color);
 }
 .projectile.splash {
   width: 24px;
@@ -46,7 +188,7 @@
     0 2px 2px #000,
     1px 0 #000,
     -1px 0 #000;
-  z-index: 5;
+  z-index: 1;
 }
 .floating-number.heal {
   color: #a1ffc8;
@@ -62,11 +204,15 @@
   border-radius: 50%;
   box-shadow: 0 0 6px var(--color);
 }
-.heal-particle {
+.heal-particle,
+.shield-particle {
   position: absolute;
   color: var(--color);
   font: bold 20px system-ui;
   text-shadow: 0 0 5px var(--color);
+}
+.shield-particle {
+  font-size: 26px;
 }
 .beam {
   position: absolute;
@@ -75,12 +221,149 @@
   border-radius: 100%;
 }
 .beam.horizontal {
-  width: 360px;
   height: 5px;
 }
 .beam.vertical {
   width: 5px;
-  height: 300px;
+}
+.ultimate-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  pointer-events: none;
+  isolation: isolate;
+}
+.ultimate-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, #020908c9, #0209086e 60%, #02090835);
+}
+.ultimate-aura {
+  position: absolute;
+  width: 62%;
+  height: 72%;
+  left: -4%;
+  bottom: 5%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--color) 40%, transparent),
+    transparent 70%
+  );
+  filter: blur(4px);
+  opacity: 0.25;
+}
+.ultimate-art {
+  position: absolute;
+  left: 1%;
+  bottom: 16%;
+  height: 74%;
+  width: 54%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(
+    0 0 10px color-mix(in srgb, var(--color) 50%, transparent)
+  );
+  z-index: 1;
+}
+.ultimate-art[data-asset-type="ultimate_cutin"],
+.ultimate-art[data-asset-type="battle_cutin"] {
+  height: 63%;
+  width: 60%;
+  left: 0;
+  bottom: 20%;
+}
+.ultimate-art[data-asset-type="avatar"] {
+  height: 48%;
+  width: 48%;
+  bottom: 23%;
+  border-radius: 12px;
+}
+.ultimate-title {
+  position: absolute;
+  left: 5%;
+  top: 15%;
+  width: 67%;
+  z-index: 2;
+  filter: drop-shadow(0 2px 3px #000);
+}
+.ultimate-title span {
+  font: 8px system-ui;
+  letter-spacing: 3px;
+  color: #f1d08c;
+  display: block;
+  margin-bottom: 4px;
+}
+.ultimate-title strong {
+  display: block;
+  font: 19px/1.1 Georgia;
+  color: #fff3d0;
+  font-weight: 400;
+  max-width: 210px;
+}
+.ultimate-title strong:after {
+  content: "";
+  display: block;
+  width: 55px;
+  height: 1px;
+  background: linear-gradient(90deg, #dfb761, transparent);
+  margin-top: 8px;
+}
+.ultimate-power {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff1b366, var(--color), transparent 68%);
+  box-shadow: 0 0 30px var(--color);
+  z-index: 1;
+}
+.ultimate-power.verdant-aura {
+  background: radial-gradient(circle, #ddffaf66, #68eeaa88, transparent 70%);
+  border: 2px solid #b5eb87;
+  box-shadow: 0 0 40px #8befad;
+}
+.ultimate-power.fiery-cleave {
+  width: 210px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(#fffcd6, #ffc05b, #f3683c);
+  box-shadow: 0 0 35px #ff8a3d;
+}
+.ultimate-power.stone-wall {
+  width: 185px;
+  height: 120px;
+  border-radius: 8px 8px 50% 50%;
+  background: repeating-linear-gradient(
+    80deg,
+    #ad895777 0 20px,
+    #e8cb8977 20px 25px
+  );
+  border: 5px solid #dfc383;
+  box-shadow: 0 0 25px #e4c783;
+}
+.ultimate-power.void-bloom {
+  background: radial-gradient(
+    circle,
+    #10051f 18%,
+    #723dad 38%,
+    #c684e999 55%,
+    transparent 70%
+  );
+  border: 2px solid #c789f3;
+  box-shadow: 0 0 40px #ad53e6;
+}
+.ultimate-power.celestial-pulse {
+  background: radial-gradient(
+    circle,
+    #fff8e8,
+    #c0ffcd77 36%,
+    #ffe09b88 58%,
+    transparent 70%
+  );
+  border: 2px solid #ffeda9;
+  box-shadow: 0 0 40px #f3e5a7;
 }
 .explosion {
   position: absolute;

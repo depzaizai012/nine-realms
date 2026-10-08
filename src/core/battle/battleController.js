@@ -30,7 +30,7 @@ export function createBattleController(
   };
   async function present(event) {
     if (!event) return;
-    if (event.kind === "damage") await vfx.attack(event);
+    if (event.kind === "damage") await vfx.attack(event, render);
     else await vfx.hit(view.actor(event.target), event);
     render();
     if (event.dead && state.enemies.some((e) => e.uid === event.target))
@@ -38,10 +38,11 @@ export function createBattleController(
   }
   async function ensureMoves() {
     if (!validMoves(state.board).length) {
+      const before = state.board;
       state.board = shuffle(state.board, rng);
       view.message("The board shifts…");
       view.board.render(state.board);
-      await vfx.fall();
+      await vfx.fall(before, state.board);
     }
   }
   async function finish() {
@@ -86,6 +87,7 @@ export function createBattleController(
   }
   async function move(a, b) {
     if (!canInput()) return false;
+    view.dismissMessage?.();
     state.phase = "swap";
     const valid = isValidSwap(state.board, a, b);
     await vfx.swap(a, b);
@@ -106,10 +108,16 @@ export function createBattleController(
       if (!step.clear.length) break;
       state.phase = "resolving";
       await vfx.clear(step);
+      const before = state.board;
       state.board = fallAndRefill(state.board, step, rng);
       view.board.render(state.board);
-      await vfx.fall();
-      for (const match of step.attacks) await present(heroAttack(state, match));
+      await vfx.fall(before, state.board);
+      for (const match of step.attacks) {
+        const event = heroAttack(state, match);
+        if (!event) continue;
+        await present(event);
+        await vfx.wait(T.heroGap);
+      }
       if (cascade === MATCH_CONFIG.maxCascades - 1) {
         state.board = shuffle(state.board, rng);
         view.board.render(state.board);
@@ -127,10 +135,20 @@ export function createBattleController(
       return;
     }
     state.phase = "ultimate";
-    for (const event of ultimate(state, hero)) await present(event);
+    view.dismissMessage?.();
+    let events = [];
+    await vfx.ultimate(hero, async () => {
+      events = ultimate(state, hero);
+      return vfx.ultimateImpact(events, render);
+    });
+    for (const event of events)
+      if (event.dead && state.enemies.some((e) => e.uid === event.target))
+        await vfx.death(event.target);
+    render();
     await finish();
   }
   function select(id) {
+    if (!canInput()) return false;
     if (state.enemies.some((e) => e.uid === id && e.hp > 0)) {
       state.selected = id;
       render();

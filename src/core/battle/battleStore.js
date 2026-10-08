@@ -16,6 +16,7 @@ export function createBattle(stage) {
     phase: "idle",
     speed: 1,
     paused: false,
+    autoBattleEnabled: false,
     board: createBoard(),
     heroes: stage.team.map((id) => {
       const h = HEROES[id],
