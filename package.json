@@ -1,0 +1,20 @@
+{
+  "name": "legend-of-the-nine-realms",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test tests/engine.test.js",
+    "test:browser": "playwright test",
+    "assets:prepare": "node scripts/prepare-assets.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "prettier": "^3.9.9",
+    "sharp": "^0.35.5",
+    "vite": "^8.3.3"
+  }
+}

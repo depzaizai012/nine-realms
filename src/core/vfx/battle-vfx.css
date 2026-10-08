@@ -1,0 +1,132 @@
+.vfx-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+  overflow: hidden;
+}
+.hit-stop .enemy img,
+.hit-stop .target-ring {
+  animation-play-state: paused;
+}
+.projectile {
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--color);
+  box-shadow: 0 0 12px 5px var(--color);
+  z-index: 2;
+}
+.projectile.leaf {
+  border-radius: 80% 0 80% 0;
+}
+.projectile.shard {
+  clip-path: polygon(50% 0, 100% 80%, 30% 100%, 0 30%);
+  width: 23px;
+  height: 25px;
+}
+.projectile.slash {
+  width: 38px;
+  height: 9px;
+  border-radius: 50%;
+  box-shadow: 0 0 15px var(--color);
+}
+.projectile.splash {
+  width: 24px;
+  height: 20px;
+  border-radius: 40% 60% 30% 70%;
+}
+.floating-number {
+  position: absolute;
+  font: bold 22px Georgia;
+  white-space: nowrap;
+  color: var(--color);
+  text-shadow:
+    0 2px 2px #000,
+    1px 0 #000,
+    -1px 0 #000;
+  z-index: 5;
+}
+.floating-number.heal {
+  color: #a1ffc8;
+}
+.floating-number.shield {
+  color: #99dcff;
+}
+.particle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: var(--color);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--color);
+}
+.heal-particle {
+  position: absolute;
+  color: var(--color);
+  font: bold 20px system-ui;
+  text-shadow: 0 0 5px var(--color);
+}
+.beam {
+  position: absolute;
+  background: #fffbc9;
+  box-shadow: 0 0 15px 7px var(--color);
+  border-radius: 100%;
+}
+.beam.horizontal {
+  width: 360px;
+  height: 5px;
+}
+.beam.vertical {
+  width: 5px;
+  height: 300px;
+}
+.explosion {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border: 8px solid #ffe6a0;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff9d1, #ffcc7155, transparent);
+  box-shadow: 0 0 24px #ffe19a;
+}
+.prism-ray {
+  position: absolute;
+  height: 1px;
+  transform-origin: left center;
+  background: linear-gradient(90deg, #d590ff, #ffde94, #92fbef);
+  box-shadow: 0 0 5px #eed6ff;
+}
+.hint {
+  animation: hint-pulse 4s infinite ease-in-out;
+}
+.directional {
+  animation: hint-direction 3.6s infinite ease-in-out;
+}
+@keyframes hint-pulse {
+  50% {
+    filter: brightness(1.55);
+    transform: scale(1.04);
+  }
+}
+@keyframes hint-direction {
+  0%,
+  35%,
+  100% {
+    transform: translate(0, 0);
+    filter: brightness(1);
+  }
+  15% {
+    transform: translate(var(--hint-x), var(--hint-y));
+    filter: brightness(1.6);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .enemy img,
+  .target-ring,
+  .hint,
+  .directional {
+    animation: none !important;
+  }
+}

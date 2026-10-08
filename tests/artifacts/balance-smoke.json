@@ -1,0 +1,7 @@
+{
+  "runs": 100,
+  "wins": 100,
+  "winRate": 1,
+  "averageWinningTurns": 33.7,
+  "policy": "Random valid moves; full-energy ultimates activated immediately. Automated smoke check, not a measured new-player clear rate."
+}
