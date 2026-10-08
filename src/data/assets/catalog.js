@@ -1,4 +1,4 @@
-// Generated from current on-disk files by scripts/rescan-assets.js. No images modified.
+// Registered production assets; original source artwork is preserved.
 export const ASSET_CATALOG = {
   "1929ad4a-2112-4ffa-aed6-75ba7c6c0cd2": {
     original:
@@ -346,16 +346,18 @@ export const ASSET_CATALOG = {
     height: 1254,
   },
   GEM_SPECIAL_LINE_H: {
-    original: "/assets/gems/GEM_SPECIAL_LINE_H.png",
+    original: null,
     url: "/assets/optimized/GEM_SPECIAL_LINE_H.webp",
     width: 1254,
     height: 1254,
+    legacyDerivative: true,
   },
   GEM_SPECIAL_LINE_V: {
-    original: "/assets/gems/GEM_SPECIAL_LINE_V.png",
+    original: null,
     url: "/assets/optimized/GEM_SPECIAL_LINE_V.webp",
     width: 1254,
     height: 1254,
+    legacyDerivative: true,
   },
   GEM_SPECIAL_PRISM: {
     original: "/assets/gems/GEM_SPECIAL_PRISM.png",
@@ -668,5 +670,77 @@ export const ASSET_CATALOG = {
     original: null,
     url: "/assets/optimized/ENEMY_W01_005_ANCIENT_GUARDIAN_IDLE.webp",
     legacyDerivative: true,
+  },
+  GEM_WOOD_LINE_H: {
+    original: "/assets/gems/GEM_WOOD_LINE_H.png",
+    url: "/assets/gems/GEM_WOOD_LINE_H.png",
+    width: 1254,
+    height: 1254,
+  },
+  GEM_WOOD_LINE_V: {
+    original: "/assets/gems/GEM_WOOD_LINE_V.png",
+    url: "/assets/gems/GEM_WOOD_LINE_V.png",
+    width: 1254,
+    height: 1254,
+  },
+  GEM_FIRE_LINE_H: {
+    original: "/assets/gems/GEM_FIRE_LINE_H.png",
+    url: "/assets/gems/GEM_FIRE_LINE_H.png",
+    width: 1254,
+    height: 1254,
+  },
+  GEM_FIRE_LINE_V: {
+    original: "/assets/gems/GEM_FIRE_LINE_V.png",
+    url: "/assets/gems/GEM_FIRE_LINE_V.png",
+    width: 1254,
+    height: 1254,
+  },
+  GEM_WATER_LINE_H: {
+    original: "/assets/gems/GEM_WATER_LINE_H.png",
+    url: "/assets/gems/GEM_WATER_LINE_H.png",
+    width: 1254,
+    height: 1254,
+  },
+  GEM_WATER_LINE_V: {
+    original: "/assets/gems/GEM_WATER_LINE_V.png",
+    url: "/assets/gems/GEM_WATER_LINE_V.png",
+    width: 1254,
+    height: 1254,
+  },
+  GEM_EARTH_LINE_H: {
+    original: "/assets/gems/GEM_EARTH_LINE_H.png",
+    url: "/assets/gems/GEM_EARTH_LINE_H.png",
+    width: 1254,
+    height: 1254,
+  },
+  GEM_EARTH_LINE_V: {
+    original: "/assets/gems/GEM_EARTH_LINE_V.png",
+    url: "/assets/gems/GEM_EARTH_LINE_V.png",
+    width: 1254,
+    height: 1254,
+  },
+  GEM_LIGHT_LINE_H: {
+    original: "/assets/gems/GEM_LIGHT_LINE_H.png",
+    url: "/assets/gems/GEM_LIGHT_LINE_H.png",
+    width: 1254,
+    height: 1254,
+  },
+  GEM_LIGHT_LINE_V: {
+    original: "/assets/gems/GEM_LIGHT_LINE_V.png",
+    url: "/assets/gems/GEM_LIGHT_LINE_V.png",
+    width: 1254,
+    height: 1254,
+  },
+  GEM_DARK_LINE_H: {
+    original: "/assets/gems/GEM_DARK_LINE_H.png",
+    url: "/assets/gems/GEM_DARK_LINE_H.png",
+    width: 1254,
+    height: 1254,
+  },
+  GEM_DARK_LINE_V: {
+    original: "/assets/gems/GEM_DARK_LINE_V.png",
+    url: "/assets/gems/GEM_DARK_LINE_V.png",
+    width: 1254,
+    height: 1254,
   },
 };

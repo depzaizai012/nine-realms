@@ -177,7 +177,7 @@ test("line beams, bomb explosion, prism rays, chain, death and heal particles", 
   await page.waitForFunction(() => window.__deathDone);
   await expect(page.locator('[data-actor="w0-0"]')).toHaveCount(0);
 });
-test("stage preloader requests its 36 stage, HUD and control assets with zero missing files", async ({
+test("stage preloader requests its 46 stage, HUD and control assets with zero missing files", async ({
   page,
 }) => {
   await page.goto("/");
@@ -202,7 +202,7 @@ test("stage preloader requests its 36 stage, HUD and control assets with zero mi
         .map((r) => r.name),
     };
   });
-  expect(audit.count).toBe(36);
+  expect(audit.count).toBe(46);
   expect(audit.detected).toBeGreaterThanOrEqual(92);
   expect(audit.failed).toEqual([]);
   expect(audit.unused).toEqual([]);

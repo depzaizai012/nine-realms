@@ -75,7 +75,7 @@ test("canonical Line H at row 3 col 4 clears exactly its 7 row cells", () => {
     expected,
   );
   assert.deepEqual(lineCells(index, "LINE_HORIZONTAL"), expected);
-  assert.equal(getGemSpecialRotation("LINE_HORIZONTAL"), 90);
+  assert.equal(getGemSpecialRotation("LINE_HORIZONTAL"), 0);
 });
 test("canonical Line V at row 2 col 5 clears exactly its 6 column cells", () => {
   const board = clean(),
@@ -90,7 +90,7 @@ test("canonical Line V at row 2 col 5 clears exactly its 6 column cells", () => 
     expected,
   );
   assert.deepEqual(lineCells(index, "LINE_VERTICAL"), expected);
-  assert.equal(getGemSpecialRotation("LINE_VERTICAL"), 90);
+  assert.equal(getGemSpecialRotation("LINE_VERTICAL"), 0);
 });
 test("vertical match-four creates LINE_VERTICAL and converging chains activate each special once", () => {
   const board = clean();

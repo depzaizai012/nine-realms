@@ -279,32 +279,9 @@ h1 {
     hazard-pulse 3.2s ease-in-out infinite,
     void-turn 40s linear infinite;
 }
-.gem[data-special^="LINE"] .special {
+.gem[data-special^="LINE"] .base {
   animation: line-charged 2.5s ease-in-out infinite;
   animation-delay: var(--gem-phase);
-}
-.gem[data-special^="LINE"]::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-  background: #eaffff;
-  box-shadow: 0 0 7px #baffff;
-  border-radius: 50%;
-  animation: charge-sweep 2.5s ease-in-out infinite;
-  animation-delay: var(--gem-phase);
-}
-.gem[data-special="LINE_HORIZONTAL"]::after {
-  width: 12%;
-  height: 3px;
-  top: 50%;
-  left: 12%;
-}
-.gem[data-special="LINE_VERTICAL"]::after {
-  height: 12%;
-  width: 3px;
-  left: 50%;
-  top: 12%;
-  animation-name: charge-sweep-v;
 }
 @keyframes hazard-pulse {
   0%,
@@ -354,37 +331,12 @@ h1 {
     filter: brightness(1.25) drop-shadow(0 0 4px #c5ffff);
   }
 }
-@keyframes charge-sweep {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  30% {
-    opacity: 0.85;
-  }
-  70% {
-    left: 76%;
-    opacity: 0.85;
-  }
-}
-@keyframes charge-sweep-v {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  30% {
-    opacity: 0.85;
-  }
-  70% {
-    top: 76%;
-    opacity: 0.85;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   .enemy-idle-wrapper,
   .enemy-drift-wrapper,
   .gem .hazard,
   .gem .special,
+  .gem[data-special^="LINE"] .base,
   .gem::after {
     animation: none !important;
   }

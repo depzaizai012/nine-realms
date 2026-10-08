@@ -279,7 +279,7 @@ for (const type of ["LINE_HORIZONTAL", "LINE_VERTICAL"])
       ? [21, 22, 23, 24, 25, 26, 27]
       : [5, 12, 19, 26, 33, 40];
     expect(beam.cells).toEqual(expected);
-    expect(beam.rotated).toBe("90deg");
+    expect(beam.rotated).toBe("0deg");
     if (horizontal) {
       expect(beam.width).toBeCloseTo(beam.gridWidth, 0);
       expect(beam.height).toBe(4);

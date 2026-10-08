@@ -33,13 +33,18 @@ export function createBoardView(root) {
           "aria-label",
           `${g.element}${g.specialType ? " " + g.specialType : ""}, row ${Math.floor(i / C.cols) + 1}, column ${(i % C.cols) + 1}`,
         );
-        const independent = ["BOMB", "PRISM"].includes(g.specialType);
+        const independent = [
+          "BOMB",
+          "PRISM",
+          "LINE_HORIZONTAL",
+          "LINE_VERTICAL",
+        ].includes(g.specialType);
         el.children[0].src = independent
-          ? getGemSpecialAsset(g.specialType)
+          ? getGemSpecialAsset(g.specialType, g.element)
           : getGemBaseAsset(g.element);
         el.children[1].hidden = !g.specialType || independent;
         if (g.specialType && !independent)
-          el.children[1].src = getGemSpecialAsset(g.specialType);
+          el.children[1].src = getGemSpecialAsset(g.specialType, g.element);
         el.children[1].style.rotate = `${getGemSpecialRotation(g.specialType)}deg`;
         el.children[2].hidden = !g.hazardType;
         if (g.hazardType) el.children[2].src = getGemHazardAsset(g.hazardType);

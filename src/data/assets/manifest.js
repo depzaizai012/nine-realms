@@ -90,10 +90,8 @@ function asset(key) {
   return fallback;
 }
 export const getHeroAsset = (id, type) => asset(`${id}_${type.toUpperCase()}`);
-// The supplied LINE_H art is vertical and LINE_V art is horizontal.
-// Keep canonical IDs/filenames and orient each overlay to its logical direction.
-export const getGemSpecialRotation = (type) =>
-  ["LINE_HORIZONTAL", "LINE_VERTICAL"].includes(type) ? 90 : 0;
+// Elemental line artwork already has its canonical H/V orientation.
+export const getGemSpecialRotation = () => 0;
 const ULTIMATE_ASSET_ORDER = [
   "full_body",
   "ultimate_cutin",
@@ -154,9 +152,11 @@ export const getBattlerAsset = (enemy, mode) =>
 export const getBossAsset = (id, phase) =>
   asset(`${id}_PHASE_${String(phase).padStart(2, "0")}`);
 export const getGemBaseAsset = (element) => asset(`GEM_${element}`);
-export const getGemSpecialAsset = (type) =>
+export const getGemSpecialAsset = (type, element) =>
   asset(
-    `GEM_SPECIAL_${{ LINE_HORIZONTAL: "LINE_H", LINE_VERTICAL: "LINE_V" }[type] || type}`,
+    ["LINE_HORIZONTAL", "LINE_VERTICAL"].includes(type)
+      ? `GEM_${element}_${type === "LINE_HORIZONTAL" ? "LINE_H" : "LINE_V"}`
+      : `GEM_SPECIAL_${type}`,
   );
 export const getGemHazardAsset = (type) => asset(`GEM_HAZARD_${type}`);
 export const getBattleBackground = (id) =>
@@ -185,9 +185,12 @@ export function stageAssets(id = "1-1") {
         .flat()
         .flatMap((e) => ["idle", "attack"].map((t) => getEnemyAsset(e.id, t))),
       ...ELEMENTS.map(getGemBaseAsset),
-      ...["LINE_HORIZONTAL", "LINE_VERTICAL", "BOMB", "PRISM"].map(
-        getGemSpecialAsset,
+      ...ELEMENTS.flatMap((element) =>
+        ["LINE_HORIZONTAL", "LINE_VERTICAL"].map((type) =>
+          getGemSpecialAsset(type, element),
+        ),
       ),
+      ...["BOMB", "PRISM"].map((type) => getGemSpecialAsset(type)),
       ...s.hazards.map(getGemHazardAsset),
       getStageBattleBackground(s),
       getRealmBoardFrame(s.realm),

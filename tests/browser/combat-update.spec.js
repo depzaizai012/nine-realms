@@ -105,8 +105,8 @@ test("Prism connects every target before explosion and cleans VFX; hazard/line a
       targets: state.board.filter((g) => g.element === "FIRE").length,
       animations: [
         document.querySelector(".hazard:not([hidden])"),
-        document.querySelector('[data-cell="1"] .special'),
-        document.querySelector('[data-cell="2"] .special'),
+        document.querySelector('[data-cell="1"] .base'),
+        document.querySelector('[data-cell="2"] .base'),
       ].map((el) => getComputedStyle(el).animationName),
     };
   });
