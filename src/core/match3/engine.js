@@ -121,9 +121,22 @@ export function resolveStep(board, { swap = null } = {}) {
     else if (
       connected.some((g) => g.horizontal) &&
       connected.some((g) => !g.horizontal)
-    )
-      type = "BOMB";
-    else if (group.cells.length === 4)
+    ) {
+      const isL = connected.some(
+        (h) =>
+          h.horizontal &&
+          connected.some(
+            (v) =>
+              !v.horizontal &&
+              h.cells.some(
+                (i) =>
+                  (i === h.cells[0] || i === h.cells.at(-1)) &&
+                  (i === v.cells[0] || i === v.cells.at(-1)),
+              ),
+          ),
+      );
+      type = isL ? "PRISM" : "BOMB";
+    } else if (group.cells.length === 4)
       type = group.horizontal ? "LINE_HORIZONTAL" : "LINE_VERTICAL";
     if (type) {
       const at =
@@ -153,8 +166,8 @@ export function resolveStep(board, { swap = null } = {}) {
     expanded = false;
     for (const i of [...clear]) {
       const g = board[i];
-      if (!g.specialType || triggered.has(i)) continue;
-      triggered.add(i);
+      if (!g.specialType || triggered.has(g.id)) continue;
+      triggered.add(g.id);
       activations.push({
         index: i,
         type: g.specialType,
@@ -197,7 +210,7 @@ export function resolveStep(board, { swap = null } = {}) {
         });
     }
   }
-  for (const i of triggered) creations.delete(i);
+  for (const a of activations) creations.delete(a.index);
   for (const i of creations.keys()) clear.delete(i);
   const attacks = groups.map((g) => ({
     element: g.element,
@@ -210,7 +223,13 @@ export function resolveStep(board, { swap = null } = {}) {
     ).length;
     if (count) attacks.push({ element, count: Math.max(3, count) });
   }
-  return { clear: [...clear], creations: [...creations], activations, attacks };
+  return {
+    clear: [...clear],
+    creations: [...creations],
+    activations,
+    attacks,
+    groups,
+  };
 }
 export function fallAndRefill(board, step, rng = Math.random) {
   const next = board.map((g) => ({ ...g }));

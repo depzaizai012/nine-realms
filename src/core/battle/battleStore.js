@@ -1,6 +1,7 @@
 import { HEROES, calculateStats } from "../../data/heroes/index.js";
 import { ENEMIES } from "../../data/enemies/index.js";
 import { createBoard } from "../match3/engine.js";
+import { installBattleSpeed } from "./battleClock.js";
 export function spawnWave(s) {
   s.enemies = s.stage.waves[s.wave].map((spec, i) => {
     const d = { ...ENEMIES[spec.id], ...spec.stats };
@@ -16,6 +17,8 @@ export function createBattle(stage) {
     phase: "idle",
     speed: 1,
     paused: false,
+    activeBattleOverlay: null,
+    disposed: false,
     autoBattleEnabled: false,
     board: createBoard(),
     heroes: stage.team.map((id) => {
@@ -28,5 +31,5 @@ export function createBattle(stage) {
     lastEnemyTarget: null,
   };
   spawnWave(s);
-  return s;
+  return installBattleSpeed(s);
 }

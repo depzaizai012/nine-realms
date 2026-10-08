@@ -1,0 +1,572 @@
+{
+  "originals": 79,
+  "totalRasterFiles": 135,
+  "registeredKeys": 92,
+  "unassigned": [
+    "public/assets/backgrounds/crimson_flame/1929ad4a-2112-4ffa-aed6-75ba7c6c0cd2.png",
+    "public/assets/backgrounds/crimson_flame/9a20d555-a8a9-4b8d-bcdd-767dafa6bcae.png",
+    "public/assets/backgrounds/crimson_flame/efdb2162-b2e5-495d-83ed-5a0e0195b79d.png",
+    "public/assets/enemies/crimson_flame/1b1d43f7-5bc5-4fb6-93ba-db9d63639add.png",
+    "public/assets/enemies/crimson_flame/5e747715-412d-4d0f-a598-0513c34c48f3.png",
+    "public/assets/enemies/crimson_flame/6569a08a-264c-4287-947f-9cb705a06cb7.png",
+    "public/assets/enemies/crimson_flame/b8b9bf13-2feb-45c1-867d-eb6f161efd47.png",
+    "public/assets/enemies/crimson_flame/d01d2d2c-8b7f-4b2f-87ef-cc9c634b4856.png",
+    "public/assets/enemies/crimson_flame/e27c7c49-4106-480b-8a82-720a8c500a40.png",
+    "public/assets/ui/546f2498-87f2-4871-ada7-f99156fa0d1f.png"
+  ],
+  "assets": [
+    {
+      "file": "public/assets/backgrounds/crimson_flame/1929ad4a-2112-4ffa-aed6-75ba7c6c0cd2.png",
+      "url": "/assets/backgrounds/crimson_flame/1929ad4a-2112-4ffa-aed6-75ba7c6c0cd2.png",
+      "bytes": 2681038,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T09:36:39.488Z"
+    },
+    {
+      "file": "public/assets/backgrounds/crimson_flame/9a20d555-a8a9-4b8d-bcdd-767dafa6bcae.png",
+      "url": "/assets/backgrounds/crimson_flame/9a20d555-a8a9-4b8d-bcdd-767dafa6bcae.png",
+      "bytes": 2883141,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T09:39:12.511Z"
+    },
+    {
+      "file": "public/assets/backgrounds/crimson_flame/efdb2162-b2e5-495d-83ed-5a0e0195b79d.png",
+      "url": "/assets/backgrounds/crimson_flame/efdb2162-b2e5-495d-83ed-5a0e0195b79d.png",
+      "bytes": 2550592,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T09:40:22.673Z"
+    },
+    {
+      "file": "public/assets/backgrounds/verdant/BG_W01_BOSS_BRIARHEART_SANCTUARY.png",
+      "url": "/assets/backgrounds/verdant/BG_W01_BOSS_BRIARHEART_SANCTUARY.png",
+      "bytes": 3013503,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T09:15:55.073Z"
+    },
+    {
+      "file": "public/assets/backgrounds/verdant/BG_W01_COMMON_WHISPERING_WILDS.png",
+      "url": "/assets/backgrounds/verdant/BG_W01_COMMON_WHISPERING_WILDS.png",
+      "bytes": 2778951,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T09:14:10.092Z"
+    },
+    {
+      "file": "public/assets/backgrounds/verdant/BG_W01_ELITE_THORNROOT_CROSSING.png",
+      "url": "/assets/backgrounds/verdant/BG_W01_ELITE_THORNROOT_CROSSING.png",
+      "bytes": 3174856,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T09:19:37.557Z"
+    },
+    {
+      "file": "public/assets/bosses/verdant/BOSS_W01_THORNHEART_PHASE_01.png",
+      "url": "/assets/optimized/BOSS_W01_THORNHEART_PHASE_01.webp",
+      "bytes": 3507212,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/bosses/verdant/BOSS_W01_THORNHEART_PHASE_02.png",
+      "url": "/assets/optimized/BOSS_W01_THORNHEART_PHASE_02.webp",
+      "bytes": 3833383,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/bosses/verdant/BOSS_W01_THORNHEART_PHASE_03.png",
+      "url": "/assets/optimized/BOSS_W01_THORNHEART_PHASE_03.webp",
+      "bytes": 3964196,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/enemies/crimson_flame/1b1d43f7-5bc5-4fb6-93ba-db9d63639add.png",
+      "url": "/assets/enemies/crimson_flame/1b1d43f7-5bc5-4fb6-93ba-db9d63639add.png",
+      "bytes": 2014370,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T08:41:23.147Z"
+    },
+    {
+      "file": "public/assets/enemies/crimson_flame/5e747715-412d-4d0f-a598-0513c34c48f3.png",
+      "url": "/assets/enemies/crimson_flame/5e747715-412d-4d0f-a598-0513c34c48f3.png",
+      "bytes": 1777652,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T09:10:14.028Z"
+    },
+    {
+      "file": "public/assets/enemies/crimson_flame/6569a08a-264c-4287-947f-9cb705a06cb7.png",
+      "url": "/assets/enemies/crimson_flame/6569a08a-264c-4287-947f-9cb705a06cb7.png",
+      "bytes": 1960287,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T08:45:16.916Z"
+    },
+    {
+      "file": "public/assets/enemies/crimson_flame/b8b9bf13-2feb-45c1-867d-eb6f161efd47.png",
+      "url": "/assets/enemies/crimson_flame/b8b9bf13-2feb-45c1-867d-eb6f161efd47.png",
+      "bytes": 2290141,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T08:41:26.848Z"
+    },
+    {
+      "file": "public/assets/enemies/crimson_flame/d01d2d2c-8b7f-4b2f-87ef-cc9c634b4856.png",
+      "url": "/assets/enemies/crimson_flame/d01d2d2c-8b7f-4b2f-87ef-cc9c634b4856.png",
+      "bytes": 1572632,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T09:10:09.977Z"
+    },
+    {
+      "file": "public/assets/enemies/crimson_flame/e27c7c49-4106-480b-8a82-720a8c500a40.png",
+      "url": "/assets/enemies/crimson_flame/e27c7c49-4106-480b-8a82-720a8c500a40.png",
+      "bytes": 1995230,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T08:45:20.401Z"
+    },
+    {
+      "file": "public/assets/enemies/verdant/ENEMY_W01_001_BLIGHT_OOZE_ATTACK.png",
+      "url": "/assets/enemies/verdant/ENEMY_W01_001_BLIGHT_OOZE_ATTACK.png",
+      "bytes": 2339362,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T07:52:01.179Z"
+    },
+    {
+      "file": "public/assets/enemies/verdant/ENEMY_W01_001_BLIGHT_OOZE_IDLE.png",
+      "url": "/assets/enemies/verdant/ENEMY_W01_001_BLIGHT_OOZE_IDLE.png",
+      "bytes": 2077346,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T07:51:57.164Z"
+    },
+    {
+      "file": "public/assets/enemies/verdant/ENEMY_W01_002_THORNFANG_WOLF_ATTACK.png",
+      "url": "/assets/enemies/verdant/ENEMY_W01_002_THORNFANG_WOLF_ATTACK.png",
+      "bytes": 2011407,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T08:03:41.178Z"
+    },
+    {
+      "file": "public/assets/enemies/verdant/ENEMY_W01_002_THORNFANG_WOLF_IDLE.png",
+      "url": "/assets/enemies/verdant/ENEMY_W01_002_THORNFANG_WOLF_IDLE.png",
+      "bytes": 2269075,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T08:04:48.584Z"
+    },
+    {
+      "file": "public/assets/enemies/verdant/ENEMY_W01_003_BRIARBORN_MARAUDER_ATTACK.png",
+      "url": "/assets/enemies/verdant/ENEMY_W01_003_BRIARBORN_MARAUDER_ATTACK.png",
+      "bytes": 2014732,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T08:16:28.784Z"
+    },
+    {
+      "file": "public/assets/enemies/verdant/ENEMY_W01_003_BRIARBORN_MARAUDER_IDLEENEMY_W01_003_BRIARBORN_MARAUDER_IDLE.png",
+      "url": "/assets/enemies/verdant/ENEMY_W01_003_BRIARBORN_MARAUDER_IDLEENEMY_W01_003_BRIARBORN_MARAUDER_IDLE.png",
+      "bytes": 1987656,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T08:16:25.175Z"
+    },
+    {
+      "file": "public/assets/enemies/verdant/ENEMY_W01_004_VENOMROOT_SPIDER_ATTACK.png",
+      "url": "/assets/enemies/verdant/ENEMY_W01_004_VENOMROOT_SPIDER_ATTACK.png",
+      "bytes": 2396035,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T08:30:19.821Z"
+    },
+    {
+      "file": "public/assets/enemies/verdant/ENEMY_W01_004_VENOMROOT_SPIDER_IDLE.png",
+      "url": "/assets/enemies/verdant/ENEMY_W01_004_VENOMROOT_SPIDER_IDLE.png",
+      "bytes": 2024699,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T08:31:20.004Z"
+    },
+    {
+      "file": "public/assets/enemies/verdant/ENEMY_W01_005_ANCIENT_BRIAR_GUARDIAN_ATTACK.png",
+      "url": "/assets/enemies/verdant/ENEMY_W01_005_ANCIENT_BRIAR_GUARDIAN_ATTACK.png",
+      "bytes": 3106952,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T08:36:57.720Z"
+    },
+    {
+      "file": "public/assets/enemies/verdant/ENEMY_W01_005_ANCIENT_BRIAR_GUARDIAN_IDLE.png",
+      "url": "/assets/enemies/verdant/ENEMY_W01_005_ANCIENT_BRIAR_GUARDIAN_IDLE.png",
+      "bytes": 2960814,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T08:36:54.521Z"
+    },
+    {
+      "file": "public/assets/frames/verdant/FRAME_W01_BOARD.png",
+      "url": "/assets/optimized/FRAME_W01_BOARD.webp",
+      "bytes": 2051763,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T19:07:43.370Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_DARK.png",
+      "url": "/assets/gems/GEM_DARK.png",
+      "bytes": 1803228,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T06:39:13.140Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_EARTH.png",
+      "url": "/assets/optimized/GEM_EARTH.webp",
+      "bytes": 2054032,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T17:59:51.990Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_FIRE.png",
+      "url": "/assets/optimized/GEM_FIRE.webp",
+      "bytes": 1738765,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T17:52:32.967Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_HAZARD_BURNING.png",
+      "url": "/assets/optimized/GEM_HAZARD_BURNING.webp",
+      "bytes": 1995995,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T17:52:06.966Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_HAZARD_FROZEN.png",
+      "url": "/assets/optimized/GEM_HAZARD_FROZEN.webp",
+      "bytes": 2183830,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T17:52:10.731Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_HAZARD_LOCKED.png",
+      "url": "/assets/optimized/GEM_HAZARD_LOCKED.webp",
+      "bytes": 1784933,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T17:52:03.309Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_HAZARD_ROOT.png",
+      "url": "/assets/optimized/GEM_HAZARD_ROOT.webp",
+      "bytes": 2346264,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T17:52:14.417Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_HAZARD_VOID.png",
+      "url": "/assets/optimized/GEM_HAZARD_VOID.webp",
+      "bytes": 1954903,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T17:52:17.642Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_LIGHT.png",
+      "url": "/assets/optimized/GEM_LIGHT.webp",
+      "bytes": 1836494,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T18:01:10.764Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_SPECIAL_BOMB.png",
+      "url": "/assets/optimized/GEM_SPECIAL_BOMB.webp",
+      "bytes": 1855169,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T17:58:04.621Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_SPECIAL_LINE_H.png",
+      "url": "/assets/optimized/GEM_SPECIAL_LINE_H.webp",
+      "bytes": 982946,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T17:52:24.254Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_SPECIAL_LINE_V.png",
+      "url": "/assets/optimized/GEM_SPECIAL_LINE_V.webp",
+      "bytes": 995414,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T17:52:20.856Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_SPECIAL_PRISM.png",
+      "url": "/assets/optimized/GEM_SPECIAL_PRISM.webp",
+      "bytes": 1919428,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T18:06:00.600Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_WATER.png",
+      "url": "/assets/optimized/GEM_WATER.webp",
+      "bytes": 1782426,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T17:52:38.012Z"
+    },
+    {
+      "file": "public/assets/gems/GEM_WOOD.png",
+      "url": "/assets/optimized/GEM_WOOD.webp",
+      "bytes": 2027928,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T17:52:29.777Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_001_ARIA/HERO_001_ARIA_AVATAR.png",
+      "url": "/assets/optimized/HERO_001_ARIA_AVATAR.webp",
+      "bytes": 2681752,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_001_ARIA/HERO_001_ARIA_BATTLE_CUTIN.png",
+      "url": "/assets/optimized/HERO_001_ARIA_BATTLE_CUTIN.webp",
+      "bytes": 2961426,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_001_ARIA/HERO_001_ARIA_FULL_BODY.png",
+      "url": "/assets/optimized/HERO_001_ARIA_FULL_BODY.webp",
+      "bytes": 2810916,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_001_ARIA/HERO_001_ARIA_PORTRAIT.png",
+      "url": "/assets/optimized/HERO_001_ARIA_PORTRAIT.webp",
+      "bytes": 2969988,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_001_ARIA/HERO_001_ARIA_ULTIMATE_CUTIN.png",
+      "url": "/assets/optimized/HERO_001_ARIA_ULTIMATE_CUTIN.webp",
+      "bytes": 3328718,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_002_FENRIR/HERO_002_FENRIR_AVATAR.png",
+      "url": "/assets/optimized/HERO_002_FENRIR_AVATAR.webp",
+      "bytes": 3425018,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_002_FENRIR/HERO_002_FENRIR_BATTLE_CUTIN.png",
+      "url": "/assets/optimized/HERO_002_FENRIR_BATTLE_CUTIN.webp",
+      "bytes": 3269951,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_002_FENRIR/HERO_002_FENRIR_FULL_BODY.png",
+      "url": "/assets/optimized/HERO_002_FENRIR_FULL_BODY.webp",
+      "bytes": 3230677,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_002_FENRIR/HERO_002_FENRIR_PORTRAIT.png",
+      "url": "/assets/optimized/HERO_002_FENRIR_PORTRAIT.webp",
+      "bytes": 3392574,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_002_FENRIR/HERO_002_FENRIR_ULTIMATE_CUTIN.png",
+      "url": "/assets/optimized/HERO_002_FENRIR_ULTIMATE_CUTIN.webp",
+      "bytes": 3397714,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_003_ROWAN/HERO_003_ROWAN_AVATAR.png",
+      "url": "/assets/optimized/HERO_003_ROWAN_AVATAR.webp",
+      "bytes": 3103359,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_003_ROWAN/HERO_003_ROWAN_BATTLE_CUTIN.png",
+      "url": "/assets/optimized/HERO_003_ROWAN_BATTLE_CUTIN.webp",
+      "bytes": 3360669,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_003_ROWAN/HERO_003_ROWAN_FULL_BODY.png",
+      "url": "/assets/optimized/HERO_003_ROWAN_FULL_BODY.webp",
+      "bytes": 3202702,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_003_ROWAN/HERO_003_ROWAN_PORTRAIT.png",
+      "url": "/assets/optimized/HERO_003_ROWAN_PORTRAIT.webp",
+      "bytes": 3422001,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_003_ROWAN/HERO_003_ROWAN_ULTIMATE_CUTIN.png",
+      "url": "/assets/optimized/HERO_003_ROWAN_ULTIMATE_CUTIN.webp",
+      "bytes": 3547173,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_004_SYLVA/HERO_004_SYLVA_AVATAR.png",
+      "url": "/assets/optimized/HERO_004_SYLVA_AVATAR.webp",
+      "bytes": 3075897,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_004_SYLVA/HERO_004_SYLVA_BATTLE_CUTIN.png",
+      "url": "/assets/optimized/HERO_004_SYLVA_BATTLE_CUTIN.webp",
+      "bytes": 3053841,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_004_SYLVA/HERO_004_SYLVA_FULL_BODY.png",
+      "url": "/assets/heroes/HERO_004_SYLVA/HERO_004_SYLVA_FULL_BODY.png",
+      "bytes": 2969888,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-07T17:00:46.506Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_004_SYLVA/HERO_004_SYLVA_PORTRAIT.png",
+      "url": "/assets/optimized/HERO_004_SYLVA_PORTRAIT.webp",
+      "bytes": 3444478,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_004_SYLVA/HERO_004_SYLVA_ULTIMATE_CUTIN.png",
+      "url": "/assets/optimized/HERO_004_SYLVA_ULTIMATE_CUTIN.webp",
+      "bytes": 3302113,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_005_PIP/HERO_005_PIP_AVATAR.png",
+      "url": "/assets/optimized/HERO_005_PIP_AVATAR.webp",
+      "bytes": 2548293,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_005_PIP/HERO_005_PIP_BATTLE_CUTIN.png",
+      "url": "/assets/optimized/HERO_005_PIP_BATTLE_CUTIN.webp",
+      "bytes": 2562898,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_005_PIP/HERO_005_PIP_FULL_BODY.png",
+      "url": "/assets/optimized/HERO_005_PIP_FULL_BODY.webp",
+      "bytes": 2696841,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_005_PIP/HERO_005_PIP_PORTRAIT.png",
+      "url": "/assets/optimized/HERO_005_PIP_PORTRAIT.webp",
+      "bytes": 2602015,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/heroes/HERO_005_PIP/HERO_005_PIP_ULTIMATE_CUTIN.png",
+      "url": "/assets/optimized/HERO_005_PIP_ULTIMATE_CUTIN.webp",
+      "bytes": 2547908,
+      "changedSinceCheckpoint": false,
+      "modifiedAt": "2026-10-07T09:47:42.000Z"
+    },
+    {
+      "file": "public/assets/ui/546f2498-87f2-4871-ada7-f99156fa0d1f.png",
+      "url": "/assets/ui/546f2498-87f2-4871-ada7-f99156fa0d1f.png",
+      "bytes": 1248389,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T11:06:17.804Z"
+    },
+    {
+      "file": "public/assets/ui/BTN_BATTLE_HELP.png",
+      "url": "/assets/ui/BTN_BATTLE_HELP.png",
+      "bytes": 676092,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T11:06:22.183Z"
+    },
+    {
+      "file": "public/assets/ui/BTN_BATTLE_PAUSE.png",
+      "url": "/assets/ui/BTN_BATTLE_PAUSE.png",
+      "bytes": 829620,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T11:06:30.059Z"
+    },
+    {
+      "file": "public/assets/ui/BTN_BATTLE_PAUSE_MENU_BG.png",
+      "url": "/assets/ui/BTN_BATTLE_PAUSE_MENU_BG.png",
+      "bytes": 1467401,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T11:22:37.213Z"
+    },
+    {
+      "file": "public/assets/ui/BTN_BATTLE_SPEED_X2.png",
+      "url": "/assets/ui/BTN_BATTLE_SPEED_X2.png",
+      "bytes": 742994,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T11:06:25.740Z"
+    },
+    {
+      "file": "public/assets/ui/BTN_BATTLE_SPEED_X2_ACTIVE.png",
+      "url": "/assets/ui/BTN_BATTLE_SPEED_X2_ACTIVE.png",
+      "bytes": 1672336,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T11:22:33.551Z"
+    },
+    {
+      "file": "public/assets/ui/HUD_HERO_BAR_BG.png",
+      "url": "/assets/ui/HUD_HERO_BAR_BG.png",
+      "bytes": 701600,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T10:26:56.500Z"
+    },
+    {
+      "file": "public/assets/ui/HUD_HERO_FRAME_NORMAL.png",
+      "url": "/assets/ui/HUD_HERO_FRAME_NORMAL.png",
+      "bytes": 625187,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T10:26:47.512Z"
+    },
+    {
+      "file": "public/assets/ui/HUD_HERO_FRAME_ULT_READY.png",
+      "url": "/assets/ui/HUD_HERO_FRAME_ULT_READY.png",
+      "bytes": 1300375,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T10:26:50.624Z"
+    },
+    {
+      "file": "public/assets/ui/HUD_HERO_ULT_GLOW_OVERLAY.png",
+      "url": "/assets/ui/HUD_HERO_ULT_GLOW_OVERLAY.png",
+      "bytes": 1567934,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T10:26:53.465Z"
+    },
+    {
+      "file": "public/assets/ui/HUD_STATUS_BAR_BG.png",
+      "url": "/assets/ui/HUD_STATUS_BAR_BG.png",
+      "bytes": 666890,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T10:30:04.545Z"
+    },
+    {
+      "file": "public/assets/ui/HUD_STATUS_ICON_SLOT.png",
+      "url": "/assets/ui/HUD_STATUS_ICON_SLOT.png",
+      "bytes": 633991,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T10:30:07.432Z"
+    },
+    {
+      "file": "public/assets/ui/PANEL_ELEMENTAL_ADVANTAGE_BG.png",
+      "url": "/assets/ui/PANEL_ELEMENTAL_ADVANTAGE_BG.png",
+      "bytes": 1738551,
+      "changedSinceCheckpoint": true,
+      "modifiedAt": "2026-10-08T11:22:40.852Z"
+    }
+  ]
+}

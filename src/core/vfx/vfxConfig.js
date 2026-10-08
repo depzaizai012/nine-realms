@@ -31,7 +31,7 @@ export const VFX_CONFIG = {
   line: 730,
   lineCharge: 180,
   lineSweep: 350,
-  lineCellStagger: 45,
+  lineCellStagger: 20,
   bomb: 650,
   prism: 850,
   hitStop: 35,

@@ -4,6 +4,8 @@ import {
   getRealmBoardFrame,
   getEnemyAsset,
   getRealmIcon,
+  getStageBattleBackground,
+  getGemBaseAsset,
 } from "../data/assets/manifest.js";
 import { REALMS } from "../data/realms/index.js";
 import {
@@ -19,30 +21,35 @@ import { createVfx } from "../core/vfx/battleVfxController.js";
 import { attachInput } from "../core/match3/inputController.js";
 import { createHints } from "../core/match3/hintController.js";
 import { createAutoBattleAdapter } from "../core/battle/autoBattleAdapter.js";
-export function mountBattle(app, stageId = "1-1") {
+import { createBattleControls } from "../components/ui/battleControls.js";
+import { createBattleOverlays } from "../components/ui/battleOverlays.js";
+import { getEnemyTier } from "../components/enemy/enemyTier.js";
+import "../styles/battle-controls.css";
+import { resolveBattleBackground } from "../data/battleBackgroundRules.js";
+export function mountBattle(app, stageId = "1-1", navigation = {}) {
   const stage = STAGES[stageId],
     state = createBattle(stage);
-  let controller, messageTimer;
+  let controller, messageTimer, controls;
+  const lifecycle = new AbortController();
   app.innerHTML = `<main class="game" aria-label="Legend of the Nine Realms">
     <div class="visual-root">
       <header class="top-hud">
-        <img class="realm-icon" src="${getRealmIcon(stage.realm)}" alt="${REALMS.find((r) => r.id === stage.realm)?.name}">
+        <button class="help battle-control" aria-label="Elemental advantage">!</button>
         <div class="stage-label"><span>STAGE ${stage.id}</span><h1>${stage.name}</h1></div>
         <div class="wave-label"><span>WAVE</span><b id="wave">1 / ${stage.waves.length}</b></div>
-        <button class="auto-control" disabled aria-pressed="false" aria-label="Auto battle off, coming soon" title="Auto Battle is coming soon"><span>AUTO</span><small>OFF</small></button>
-        <button class="pause" aria-label="Pause battle">Ⅱ</button>
+        <button class="speed battle-control" aria-label="Toggle double speed" aria-pressed="false">×2</button>
+        <button class="pause battle-control" aria-label="Pause battle">Ⅱ</button>
       </header>
-      <section class="combat" style="background-image:url('${getBattleBackground(stage.background)}')">
-        <div class="enemy-hud"><img class="enemy-icon" alt=""><div><div class="enemy-heading"><b class="enemy-name"></b><span class="enemy-hp-text"></span></div><div class="bar enemy-hp"><i class="trail"></i><i class="fill"></i></div></div></div>
+      <section class="combat" style="background-image:url('${getStageBattleBackground(stage)}')">
+        <div class="enemy-hud"><img class="enemy-icon" alt=""><div><span class="boss-stage-info"></span><div class="enemy-heading"><b class="enemy-name"></b><span class="enemy-hp-text"></span></div><div class="bar enemy-hp"><i class="trail"></i><i class="fill"></i></div><div class="boss-mana" hidden><i></i></div></div></div>
         <div class="location">${REALMS.find((r) => r.id === stage.realm)?.name.toUpperCase()} <span>•</span> ${stage.subtitle}</div>
         <div class="enemy-field"></div><div class="combat-vignette"></div>
       </section>
       <section class="party" aria-label="Heroes"></section>
       <section class="board-shell"><img class="board-frame" src="${getRealmBoardFrame(stage.realm)}" alt=""><div class="board" role="grid" aria-label="Match three board"></div><div class="board-vfx-layer" aria-hidden="true"></div></section>
-      <footer><span>NINE REALMS</span><span>Swipe to match · Tap a hero for an ultimate</span></footer>
     </div>
     <div class="vfx-layer" aria-hidden="true"></div><div class="number-layer" aria-hidden="true"></div><div class="toast" role="status"></div>
-    <dialog class="pause-dialog"><div class="dialog-mark">✦</div><p>NINE REALMS</p><h2>A moment of stillness</h2><p>Your journey will be here.</p><button class="resume primary">Resume journey</button><button class="restart">Restart stage</button></dialog><dialog class="result-dialog"></dialog>
+    <dialog class="result-dialog"></dialog>
   </main>`;
   const theme = BOARD_THEMES[stage.realm] || DEFAULT_BOARD_THEME;
   const boardRoot = app.querySelector(".board");
@@ -74,28 +81,47 @@ export function mountBattle(app, stageId = "1-1") {
       root.querySelector(".toast").classList.remove("visible");
     },
     render(s) {
+      const background = resolveBattleBackground(s.stage),
+        combat = root.querySelector(".combat");
+      if (combat.dataset.backgroundKey !== background.assetKey) {
+        combat.dataset.backgroundKey = background.assetKey;
+        combat.dataset.backgroundTier = background.tier;
+        combat.style.backgroundImage = `url('${getStageBattleBackground(s.stage)}')`;
+        combat.style.setProperty(
+          "--ground-bottom",
+          `${background.groundBottomPercent}%`,
+        );
+      }
       heroes.render(s.heroes);
       enemies.render(s);
       root.querySelector("#wave").textContent =
         `${s.wave + 1} / ${s.stage.waves.length}`;
-      const enemy = s.enemies.find((e) => e.uid === s.selected);
+      const enemy = s.enemies.find(
+        (e) => getEnemyTier(e) === "BOSS" && e.hp > 0,
+      );
+      root.querySelector(".enemy-hud").hidden = !enemy;
       if (enemy) {
-        root.querySelector(".enemy-icon").src = getEnemyAsset(
-          enemy.assetId,
-          "idle",
-        );
+        root.querySelector(".enemy-icon").src = getGemBaseAsset(enemy.element);
+        root.querySelector(".enemy-icon").alt = enemy.element;
+        root.querySelector(".boss-stage-info").textContent =
+          `STAGE ${s.stage.id} · ${s.stage.name} · WAVE ${s.wave + 1}/${s.stage.waves.length}`;
         root.querySelector(".enemy-name").textContent =
           `${enemy.elite ? "ELITE " : ""}${enemy.name}`;
         root.querySelector(".enemy-hp-text").textContent =
           `${enemy.hp} / ${enemy.maxHp}`;
         for (const el of root.querySelectorAll(".enemy-hp i"))
           el.style.width = `${(enemy.hp / enemy.maxHp) * 100}%`;
+        const mana = root.querySelector(".boss-mana"),
+          max = enemy.maxMana ?? enemy.maxEnergy ?? 0;
+        mana.hidden = !max;
+        if (max)
+          mana.firstChild.style.width = `${Math.min(1, (enemy.mana ?? enemy.energy ?? 0) / max) * 100}%`;
       }
     },
     result(won, s) {
       const dialog = root.querySelector(".result-dialog");
       dialog.innerHTML = `<div class="dialog-mark">${won ? "✦" : "◇"}</div><p>STAGE ${s.stage.id} · ${s.stage.name}</p><h2>${won ? "The canopy awakens" : "The grove remembers"}</h2><p>${won ? "Victory · All three waves cleared" : "Your heroes have fallen. Try a new path."}</p><p>${s.turn} turns · ${s.heroes.filter((h) => h.hp > 0).length} heroes standing</p><button class="primary">Play again</button>`;
-      dialog.querySelector("button").onclick = () => location.reload();
+      dialog.querySelector("button").onclick = () => navigation.onReplay?.();
       dialog.showModal();
     },
   };
@@ -106,30 +132,63 @@ export function mountBattle(app, stageId = "1-1") {
   enemies.spawn(state.enemies);
   controller.render();
   const hints = createHints(state, board);
-  attachInput(root.querySelector(".board"), {
-    ...controller,
-    swap: controller.move,
-    interact: hints.reset,
+  const input = attachInput(
+    root.querySelector(".board"),
+    {
+      ...controller,
+      swap: controller.move,
+      interact: hints.reset,
+    },
+    lifecycle.signal,
+  );
+  root.addEventListener("pointerdown", hints.reset, {
+    signal: lifecycle.signal,
   });
-  root.addEventListener("pointerdown", hints.reset);
-  const pause = root.querySelector(".pause-dialog");
-  root.querySelector(".pause").onclick = () => {
-    state.paused = true;
-    pause.showModal();
+  const destroy = () => {
+    if (state.disposed) return;
+    input.cancel();
+    hints.destroy();
+    clearTimeout(messageTimer);
+    lifecycle.abort();
+    vfx.dispose();
+    overlays.destroy();
+    root.remove();
   };
-  const resume = () => {
-    state.paused = false;
-    pause.close();
-    hints.reset();
-  };
-  root.querySelector(".resume").onclick = resume;
-  root.querySelector(".restart").onclick = () => location.reload();
-  pause.addEventListener("cancel", (e) => {
-    e.preventDefault();
-    resume();
-  });
+  const overlays = createBattleOverlays(
+    root,
+    state,
+    {
+      clock: vfx.clock,
+      onReplay: () => {
+        if (navigation.onReplay) navigation.onReplay();
+        else {
+          destroy();
+          mountBattle(app, stageId, navigation);
+        }
+      },
+      onTown: () => navigation.onTown?.(),
+      onInteraction: () => {
+        input.cancel();
+        hints.reset();
+        view.dismissMessage();
+      },
+      onControls: () => controls?.render(),
+    },
+    lifecycle.signal,
+  );
+  controls = createBattleControls(root, state, vfx.clock, overlays);
   message("Swipe adjacent gems to match three");
   if (import.meta.env.DEV)
-    window.__battle = { state, controller, view, vfx, hints, auto };
-  return { state, controller, auto };
+    window.__battle = {
+      state,
+      controller,
+      view,
+      vfx,
+      hints,
+      auto,
+      overlays,
+      controls,
+      destroy,
+    };
+  return { state, controller, auto, destroy };
 }

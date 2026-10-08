@@ -24,3 +24,28 @@ dist-ssr
 *.sw?
 test-results/
 playwright-report/
+
+# Deployment linkage and build caches
+.vercel/
+.vite/
+coverage/
+
+# Private environment and authentication files (examples must be sanitized)
+.env
+.env.*
+!.env.example
+.npmrc
+.aws/
+.ssh/
+.codex/
+.agents/
+credentials*
+secrets*
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*.jks
+auth.json
+service-account*.json

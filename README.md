@@ -13,7 +13,29 @@ npm run build
 
 On Windows with PowerShell script execution disabled, use `npm.cmd` and `npx.cmd`. Browser tests start or reuse Vite on port 5175. Set `PLAYWRIGHT_CHROME_PATH` to use an installed Chrome executable.
 
-Swipe adjacent gems, or tap two adjacent cells. Arrow keys swap the focused cell. Tap an enemy to select it. Match a hero's element to attack and gain energy. A gold energy bar marks an available ultimate; tap the hero to activate it. Pause remains in the top HUD. `AUTO OFF` reserves the future Auto Battle control and is disabled; combat stays manual.
+## Development, production build and Vercel
+
+Use Node.js **24.x** and npm; keep `package-lock.json` committed. For a clean checkout run `npm ci --include=dev`, then `npm run dev`. Production verification:
+
+```sh
+npm run check:secrets
+npm test
+npm run build
+npm run check:deployment
+npm run test:production
+```
+
+`test:production` uses the built `dist` files and a local case-sensitive routing preview; it does not deploy. `npm run preview` is available for a normal local Vite build preview. The app currently needs **no application environment variables or API credentials**.
+
+Confirmed targets: GitHub [depzaizai012/nine-realms](https://github.com/depzaizai012/nine-realms), Vercel project **9realms**, requested personal account **depzaizai012**, preferred production address **https://9realms.vercel.app**. No push or deployment is performed by preparation scripts.
+
+After explicit approval to publish, push the `main` branch and import that repository in Vercel. Select project `9realms`, root directory `.`, Vite, Node 24.x, and production branch `main`. `vercel.json` sets install `npm ci --include=dev`, build `npm run build`, output `dist`, and SPA rewrites. Files under `/assets` and missing filenames with extensions stay outside the SPA fallback, so a wrong asset path cannot silently return HTML. These settings follow [Vercel's Vite SPA guidance](https://vercel.com/docs/frameworks/frontend/vite) and [Node.js version settings](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions).
+
+The current Battle/Town router keeps screen state in memory. Direct non-asset URL refreshes load the existing SPA entry; refreshing starts Stage 1-1 rather than inventing URL-driven game screens. The requested `.vercel.app` address must be available and assigned by Vercel when the project is created/linked.
+
+See [DEPLOYMENT_PREPARATION.md](DEPLOYMENT_PREPARATION.md) for exact commit/push commands, destination checks and iOS/Android testing steps. Do not commit `.env` files, credentials or `.vercel` linkage files.
+
+Swipe adjacent gems, or tap two adjacent cells. Arrow keys swap the focused cell. Tap an enemy to select it. Match a hero's element to attack and gain energy. A gold energy bar marks an available ultimate; tap the hero to activate it. The top HUD has production Help, x2 and Pause controls. Pause offers Replay and Back to Town; outside/Escape resumes. See [BATTLE_PRESENTATION_REPORT.md](BATTLE_PRESENTATION_REPORT.md) for current asset/background/grounding updates.
 
 ## Architecture
 
@@ -35,11 +57,11 @@ HP, energy, death, shields and modifiers persist when spawning a new wave. Enemy
 
 ## Production assets
 
-56 original PNGs are preserved under `public/assets`. Optimized derivatives under `public/assets/optimized` use the same production artwork. All 24 assets required by Stage 1-1 preload successfully, including the five ultimate art choices. Unused cut-ins, non-stage enemies, backgrounds and bosses are registered but not preloaded.
+The current inventory contains 79 source PNGs and 56 existing derivatives. Stage 1-1 preloads 36 unique URLs for its current artwork, Hero HUD and controls. Unused enemies, backgrounds and boss art are registered without preloading the full pack.
 
-Run `npm run assets:prepare` after updating the asset pack to rebuild the optimized assets and generated catalog. Optimization reduces the full pack from 146,703,613 bytes to 3,351,314 bytes. Components request logical assets through manifest helpers.
+Run `npm run assets:scan` after replacing production assets to register actual files and measure sprite bounds. It creates no bitmap copies, reuses verified unchanged derivatives and routes changed art to its current source. Components request logical assets through manifest helpers. Older acceptance reports describe earlier snapshots; the current presentation report and inventory reflect the latest pack.
 
-The supplied pack lacks `HERO_004_SYLVA_FULL_BODY.png`. Sylva's HUD uses her avatar and her ultimate uses the existing `ULTIMATE_CUTIN`. The manifest resolves ultimate assets in order: full body → ultimate cut-in → battle cut-in → avatar, including a load-error fallback. Missing preferred art logs a development warning. Future realms and bosses have canonical data records; their artwork and stages are outside this slice.
+The newly supplied `HERO_004_SYLVA_FULL_BODY.png` is registered and used for her ultimate. All Hero HUDs still use avatars. The manifest retains the fallback order full body → ultimate cut-in → battle cut-in → avatar. Missing preferred art logs a development warning; future realms/stages are outside this slice.
 
 The original `GEM_SPECIAL_LINE_H` image is vertical; `GEM_SPECIAL_LINE_V` is horizontal. The board renderer rotates these two overlays 90° while retaining canonical asset names. Logical Line H always clears a row and Line V always clears a column.
 

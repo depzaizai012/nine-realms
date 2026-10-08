@@ -144,6 +144,11 @@ test("deterministic four cascades still produce ONE turn and ONE sequential enem
     hit: noop,
     attack: async (event) => {
       if (event.source.startsWith("w")) enemyActions.push(event);
+      else {
+        assert.equal(clears, 4, "all cascades finish before any hero action");
+        assert.equal(findMatches(s.board).length, 0);
+        assert.equal(s.phase, "hero");
+      }
     },
   };
   const c = createBattleController(
@@ -161,6 +166,14 @@ test("deterministic four cascades still produce ONE turn and ONE sequential enem
   await c.move(...validMoves(s.board)[0]);
   assert.equal(clears, 4);
   assert.equal(s.turn, 1);
+  assert.equal(s.resolveResult.cascadesCount, 3);
+  assert.equal(
+    s.resolveResult.totalTilesCleared,
+    Object.values(s.resolveResult.totalClearedByElement).reduce(
+      (a, b) => a + b,
+      0,
+    ),
+  );
   assert.equal(enemyActions.length, 2);
   assert.notEqual(enemyActions[0].target, enemyActions[1].target);
 });

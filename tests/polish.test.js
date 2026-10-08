@@ -16,6 +16,7 @@ import {
 import { createBattle } from "../src/core/battle/battleStore.js";
 import { createBattleController } from "../src/core/battle/battleController.js";
 import { createAutoBattleAdapter } from "../src/core/battle/autoBattleAdapter.js";
+import { swapped } from "../src/core/match3/boardUtils.js";
 import { STAGES } from "../src/data/stages/index.js";
 const clean = () =>
   Array.from({ length: C.rows * C.cols }, (_, i) => ({
@@ -25,6 +26,43 @@ const clean = () =>
     specialType: null,
     hazardType: null,
   }));
+
+test("dragged Bomb activates at destination with clamped 3x3, each special ID once", () => {
+  const board = clean();
+  board[15].specialType = "BOMB";
+  const step = resolveStep(swapped(board, 15, 16), { swap: [16, 15] });
+  assert.equal(step.activations[0].index, 16);
+  assert.deepEqual(
+    step.clear.sort((a, b) => a - b),
+    [8, 9, 10, 15, 16, 17, 22, 23, 24],
+  );
+});
+
+test("horizontal/vertical four and five plus all L orientations create at destination", () => {
+  for (const [cells, type] of [
+    [[14, 15, 16, 17], "LINE_HORIZONTAL"],
+    [[2, 9, 16, 23], "LINE_VERTICAL"],
+    [[14, 15, 16, 17, 18], "PRISM"],
+    [[2, 9, 16, 23, 30], "PRISM"],
+    [[14, 15, 16, 21, 28], "PRISM"],
+    [[14, 15, 16, 23, 30], "PRISM"],
+    [[14, 15, 16, 7, 0], "PRISM"],
+    [[14, 15, 16, 9, 2], "PRISM"],
+  ]) {
+    const board = clean();
+    board.forEach((g, i) => {
+      g.element = i % 2 ? "WOOD" : "WATER";
+    });
+    for (const i of cells) board[i].element = "FIRE";
+    const destination = cells[0];
+    const step = resolveStep(board, { swap: [destination, destination + 7] });
+    assert.ok(
+      step.creations.some(
+        ([i, g]) => i === destination && g.specialType === type,
+      ),
+    );
+  }
+});
 test("canonical Line H at row 3 col 4 clears exactly its 7 row cells", () => {
   const board = clean(),
     index = 3 * C.cols + 4;
@@ -99,7 +137,7 @@ test("ultimate production fallback order and Sylva missing full body", () => {
   }
   assert.equal(
     getHeroUltimateAsset("HERO_004_SYLVA", { warn: false }).type,
-    "ultimate_cutin",
+    "full_body",
   );
 });
 test("AUTO stays off, exposes legal moves / ready ultimates / generic targets and shared human APIs", () => {

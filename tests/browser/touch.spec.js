@@ -24,7 +24,7 @@ test("mobile touch swipe resolves one turn; pause stops in-flight resolution", a
   });
   await page.waitForFunction(() => window.__battle.state.turn === 1);
   await page.locator(".pause").click();
-  await expect(page.locator(".pause-dialog")).toBeVisible();
+  await expect(page.locator(".battle-overlay-dialog")).toBeVisible();
   const hp = await page.evaluate(() =>
     window.__battle.state.heroes.map((h) => h.hp),
   );
@@ -32,7 +32,8 @@ test("mobile touch swipe resolves one turn; pause stops in-flight resolution", a
   expect(
     await page.evaluate(() => window.__battle.state.heroes.map((h) => h.hp)),
   ).toEqual(hp);
-  await page.locator(".resume").click();
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".battle-overlay-dialog")).not.toBeVisible();
   await page.evaluate(() => (window.__battle.state.speed = 5));
   await page.waitForFunction(() => window.__battle.state.phase === "idle");
   expect(await page.evaluate(() => window.__battle.state.turn)).toBe(1);

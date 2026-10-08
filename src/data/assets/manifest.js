@@ -2,9 +2,56 @@ import { STAGES } from "../stages/index.js";
 import { ELEMENTS } from "../elements/index.js";
 import { ASSET_CATALOG } from "./catalog.js";
 import { REALMS } from "../realms/index.js";
+import { ASSET_ALIASES } from "./battleAssetBindings.js";
+import { resolveBattleBackground } from "../battleBackgroundRules.js";
 export const MANIFEST = Object.fromEntries(
   Object.entries(ASSET_CATALOG).map(([key, value]) => [key, value.url]),
 );
+for (const [key, target] of Object.entries(ASSET_ALIASES))
+  if (ASSET_CATALOG[target]) MANIFEST[key] = ASSET_CATALOG[target].url;
+export const getAssetMetadata = (key) =>
+  ASSET_CATALOG[ASSET_ALIASES[key] || key];
+export const COMMON_HUD_ASSETS = Object.freeze([
+  "HUD_HERO_FRAME_NORMAL",
+  "HUD_HERO_FRAME_ULT_READY",
+  "HUD_HERO_ULT_GLOW_OVERLAY",
+  "HUD_HERO_BAR_BG",
+  "HUD_STATUS_ICON_SLOT",
+  "HUD_STATUS_BAR_BG",
+]);
+// Paths verified against the actual supplied files; preserve names and originals.
+for (const key of COMMON_HUD_ASSETS) MANIFEST[key] = `/assets/ui/${key}.png`;
+const failedHudAssets = new Set(),
+  warnedHudAssets = new Set();
+export const BATTLE_CONTROL_ASSETS = Object.freeze([
+  "BTN_BATTLE_HELP",
+  "BTN_BATTLE_SPEED_X2",
+  "BTN_BATTLE_SPEED_X2_ACTIVE",
+  "BTN_BATTLE_PAUSE",
+  "BTN_BATTLE_PAUSE_MENU_BG",
+  "PANEL_ELEMENTAL_ADVANTAGE_BG",
+]);
+for (const key of BATTLE_CONTROL_ASSETS)
+  MANIFEST[key] = `/assets/ui/${key}.png`;
+export function markHudAssetFailed(key) {
+  failedHudAssets.add(key);
+  if (import.meta.env?.DEV && !warnedHudAssets.has(key)) {
+    console.warn(`HUD asset unavailable: ${key}.png; using CSS fallback.`);
+    warnedHudAssets.add(key);
+  }
+}
+export function getHudAsset(key) {
+  if (!MANIFEST[key] || failedHudAssets.has(key)) {
+    markHudAssetFailed(key);
+    return null;
+  }
+  return MANIFEST[key];
+}
+export function getStatusIconAsset(status) {
+  const key = status.iconAssetId ?? status.iconKey ?? status.assetId;
+  if (!key) return null;
+  return MANIFEST[key] || null;
+}
 const fallback =
   "data:image/svg+xml," +
   encodeURIComponent(
@@ -15,6 +62,20 @@ export function installAssetFallbacks(root) {
     "error",
     (event) => {
       const img = event.target;
+      if (img instanceof HTMLImageElement && img.dataset.hudAsset) {
+        const key = img.dataset.hudAsset;
+        markHudAssetFailed(key);
+        root
+          .querySelectorAll(`img[data-hud-asset="${key}"]`)
+          .forEach((node) => {
+            node.hidden = true;
+            node.closest(".overlay-panel")?.classList.add("ui-panel-fallback");
+            node
+              .closest(".hero-card")
+              ?.classList.add(`missing-${key.toLowerCase()}`);
+          });
+        return;
+      }
       if (img instanceof HTMLImageElement && img.src !== fallback) {
         if (import.meta.env.DEV) console.warn(`Failed asset: ${img.src}`);
         img.src = fallback;
@@ -84,6 +145,12 @@ export async function loadHeroUltimateAsset(id) {
 }
 export const getEnemyAsset = (id, state = "idle") =>
   asset(`${id}_${state.toUpperCase()}`);
+export const getBattlerAssetKey = (enemy, mode = "idle") =>
+  enemy.assetId?.startsWith("BOSS_")
+    ? `${enemy.assetId}_PHASE_${String(enemy.phase ?? 1).padStart(2, "0")}`
+    : `${enemy.assetId}_${mode.toUpperCase()}`;
+export const getBattlerAsset = (enemy, mode) =>
+  asset(getBattlerAssetKey(enemy, mode));
 export const getBossAsset = (id, phase) =>
   asset(`${id}_PHASE_${String(phase).padStart(2, "0")}`);
 export const getGemBaseAsset = (element) => asset(`GEM_${element}`);
@@ -102,12 +169,16 @@ export const getBattleBackground = (id) =>
   );
 export const getRealmBoardFrame = (realm) =>
   asset({ VERDANT_REALM: "FRAME_W01_BOARD" }[realm] || `FRAME_${realm}_BOARD`);
+export const getStageBattleBackground = (stage) =>
+  getBattleBackground(resolveBattleBackground(stage).assetKey);
 export const getRealmIcon = (realm) =>
   asset(REALMS.find((r) => r.id === realm)?.iconAsset || `ICON_${realm}`);
 export function stageAssets(id = "1-1") {
   const s = STAGES[id];
   return [
     ...new Set([
+      ...COMMON_HUD_ASSETS.map(getHudAsset).filter(Boolean),
+      ...BATTLE_CONTROL_ASSETS.map(getHudAsset).filter(Boolean),
       ...s.team.map((h) => getHeroAsset(h, "avatar")),
       ...s.team.map((h) => getHeroUltimateAsset(h, { warn: false }).url),
       ...s.waves
@@ -118,7 +189,7 @@ export function stageAssets(id = "1-1") {
         getGemSpecialAsset,
       ),
       ...s.hazards.map(getGemHazardAsset),
-      getBattleBackground(s.background),
+      getStageBattleBackground(s),
       getRealmBoardFrame(s.realm),
     ]),
   ];

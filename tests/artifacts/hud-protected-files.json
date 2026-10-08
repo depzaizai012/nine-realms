@@ -1,0 +1,42 @@
+[
+  {
+    "file": "src/core/match3/engine.js",
+    "unchanged": true
+  },
+  {
+    "file": "src/core/battle/engine.js",
+    "unchanged": true
+  },
+  {
+    "file": "src/core/battle/battleController.js",
+    "unchanged": true
+  },
+  {
+    "file": "src/core/vfx/battleVfxController.js",
+    "unchanged": true
+  },
+  {
+    "file": "src/core/vfx/heroActionVfxController.js",
+    "unchanged": true
+  },
+  {
+    "file": "src/core/vfx/boardVfxController.js",
+    "unchanged": true
+  },
+  {
+    "file": "src/components/enemy/enemyView.js",
+    "unchanged": true
+  },
+  {
+    "file": "src/data/enemies/index.js",
+    "unchanged": true
+  },
+  {
+    "file": "src/data/heroes/index.js",
+    "unchanged": true
+  },
+  {
+    "file": "src/data/stages/index.js",
+    "unchanged": true
+  }
+]

@@ -301,8 +301,8 @@ for (const type of ["LINE_HORIZONTAL", "LINE_VERTICAL"])
     for (let i = 1; i < result.explosions.length; i++)
       expect(
         result.explosions[i].time - result.explosions[i - 1].time,
-      ).toBeGreaterThanOrEqual(25);
-    expect(result.elapsed).toBeGreaterThanOrEqual(650);
+      ).toBeGreaterThanOrEqual(12);
+    expect(result.elapsed).toBeGreaterThanOrEqual(500);
     expect(result.elapsed).toBeLessThan(1000);
   });
 
@@ -325,8 +325,7 @@ for (const size of [
     });
     await page.setViewportSize(size);
     await setup(page);
-    await expect(page.locator(".speed")).toHaveCount(0);
-    await expect(page.locator(".auto-control")).toBeDisabled();
+    await expect(page.locator(".speed")).toHaveCount(1);
     expect(
       await page.evaluate(() => window.__battle.state.autoBattleEnabled),
     ).toBe(false);
@@ -440,13 +439,10 @@ for (const size of [
           title: document.querySelector(".ultimate-title strong").textContent,
         };
       });
-      expect(layout.type).toBe(
-        id.includes("SYLVA") ? "ultimate_cutin" : "full_body",
-      );
-      expect(layout.src).toContain(
-        id.includes("SYLVA") ? "ULTIMATE_CUTIN" : "FULL_BODY",
-      );
-      expect(layout.left).toBeGreaterThanOrEqual(0);
+      expect(layout.type).toBe("full_body");
+      expect(layout.src).toContain("FULL_BODY");
+      // WAAPI scale/translation can leave a few millionths of a CSS pixel at 0.
+      expect(layout.left).toBeGreaterThanOrEqual(-0.1);
       expect(layout.right).toBeLessThan(layout.enemyLeft);
       expect(layout.enemyRight).toBeLessThanOrEqual(size.width);
       expect(layout.top).toBeGreaterThanOrEqual(layout.hudBottom);
@@ -503,6 +499,6 @@ for (const size of [
     }
     expect(
       warnings.some((w) => w.includes("HERO_004_SYLVA_FULL_BODY.png")),
-    ).toBe(true);
+    ).toBe(false);
     expect(errors).toEqual([]);
   });

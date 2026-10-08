@@ -1,5 +1,6 @@
 import { MATCH_CONFIG as C } from "../../data/boardConfig.js";
 import { calculateStats } from "../../data/heroes/index.js";
+import { getElementMultiplier } from "../../data/elementalMatchups.js";
 export function selectedEnemy(s) {
   return (
     s.enemies.find((e) => e.uid === s.selected && e.hp > 0) ||
@@ -14,7 +15,12 @@ export function heroAttack(s, match) {
   const tier = Math.min(2, Math.max(0, match.count - 3)),
     amount = Math.max(
       1,
-      Math.round(hero.stats.atk * C.damage[tier] - target.defense),
+      Math.round(
+        hero.stats.atk *
+          C.damage[tier] *
+          getElementMultiplier(hero.element, target.element) -
+          target.defense,
+      ),
     );
   target.hp = Math.max(0, target.hp - amount);
   hero.energy = Math.min(C.maxEnergy, hero.energy + C.energy[tier]);
@@ -36,7 +42,11 @@ export function chooseHero(s, previous, rng = Math.random) {
 export function enemyAttack(s, enemy, hero) {
   const damage = Math.max(
       1,
-      Math.round(enemy.attack * (1 - (enemy.debuff || 0))),
+      Math.round(
+        enemy.attack *
+          (1 - (enemy.debuff || 0)) *
+          getElementMultiplier(enemy.element, hero.element),
+      ),
     ),
     absorbed = Math.min(hero.shield, damage);
   hero.shield -= absorbed;
@@ -60,7 +70,9 @@ export function ultimate(s, hero) {
     const target = selectedEnemy(s);
     if (target) {
       const amount = Math.round(
-        calculateStats(hero, hero.modifiers).atk * skill.damage,
+        calculateStats(hero, hero.modifiers).atk *
+          skill.damage *
+          getElementMultiplier(hero.element, target.element),
       );
       target.hp = Math.max(0, target.hp - amount);
       events.push({

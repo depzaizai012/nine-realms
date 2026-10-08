@@ -22,7 +22,7 @@ test("mobile layouts, production art, target, drag, pause and hints", async ({
         cards = [...document.querySelectorAll(".hero-card")].map((e) =>
           e.getBoundingClientRect(),
         ),
-        footer = document.querySelector("footer").getBoundingClientRect();
+        frame = document.querySelector(".board-shell").getBoundingClientRect();
       return {
         cols: getComputedStyle(
           document.querySelector(".board"),
@@ -34,9 +34,11 @@ test("mobile layouts, production art, target, drag, pause and hints", async ({
         sameRow: cards.every((r) => r.y === cards[0].y),
         gap: board.top - cards[0].bottom,
         boardBottom: board.bottom,
-        footerBottom: footer.bottom,
+        frameBottom: frame.bottom,
+        footerCount: document.querySelectorAll("footer").length,
         images: [...document.images].every(
-          (i) => i.hidden || i.naturalWidth > 0,
+          (i) =>
+            i.hidden || i.getClientRects().length === 0 || i.naturalWidth > 0,
         ),
       };
     });
@@ -44,7 +46,8 @@ test("mobile layouts, production art, target, drag, pause and hints", async ({
     expect(layout.rows).toBe(6);
     expect(layout.scroll).toBe(false);
     expect(layout.sameRow).toBe(true);
-    expect(layout.footerBottom).toBeLessThanOrEqual(size.height);
+    expect(layout.footerCount).toBe(0);
+    expect(Math.abs(layout.frameBottom - size.height)).toBeLessThanOrEqual(1);
     expect(layout.images).toBe(true);
     await page.screenshot({ path: `tests/artifacts/battle-${size.width}.png` });
   }
@@ -52,16 +55,15 @@ test("mobile layouts, production art, target, drag, pause and hints", async ({
   expect(await page.evaluate(() => window.__battle.state.selected)).toBe(
     "w0-1",
   );
-  await expect(page.locator(".speed")).toHaveCount(0);
-  await expect(page.locator(".auto-control")).toContainText("AUTO");
-  await expect(page.locator(".auto-control")).toBeDisabled();
+  await expect(page.locator(".speed")).toHaveCount(1);
+  await expect(page.locator(".help")).toHaveCount(1);
   expect(
     await page.evaluate(() => window.__battle.state.autoBattleEnabled),
   ).toBe(false);
   await page.locator(".pause").click();
-  await expect(page.locator(".pause-dialog")).toBeVisible();
-  await page.locator(".resume").click();
-  await expect(page.locator(".pause-dialog")).not.toBeVisible();
+  await expect(page.locator(".battle-overlay-dialog")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".battle-overlay-dialog")).not.toBeVisible();
   const move = await page.evaluate(async () => {
     const { validMoves } = await import("/src/core/match3/engine.js");
     return validMoves(window.__battle.state.board)[0];

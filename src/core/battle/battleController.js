@@ -22,8 +22,16 @@ export function createBattleController(
   vfx,
   { rng = Math.random } = {},
 ) {
-  const canInput = () => state.phase === "idle" && !state.paused;
+  const canInput = () =>
+    state.phase === "idle" &&
+    !state.paused &&
+    !state.disposed &&
+    !state.activeBattleOverlay;
+  const ensureActive = () => {
+    if (state.disposed) throw new DOMException("Battle disposed", "AbortError");
+  };
   const render = () => {
+    if (state.disposed) return;
     const target = selectedEnemy(state);
     if (target) state.selected = target.uid;
     view.render(state);
@@ -32,6 +40,7 @@ export function createBattleController(
     if (!event) return;
     if (event.kind === "damage") await vfx.attack(event, render);
     else await vfx.hit(view.actor(event.target), event);
+    ensureActive();
     render();
     if (event.dead && state.enemies.some((e) => e.uid === event.target))
       await vfx.death(event.target);
@@ -46,6 +55,7 @@ export function createBattleController(
     }
   }
   async function finish() {
+    ensureActive();
     if (!state.heroes.some((h) => h.hp > 0)) {
       state.phase = "defeat";
       view.result(false, state);
@@ -66,10 +76,12 @@ export function createBattleController(
       render();
     }
     await ensureMoves();
+    ensureActive();
     state.phase = "idle";
     render();
   }
   async function enemyPhase() {
+    await vfx.wait(0);
     state.phase = "enemy";
     for (const enemy of state.enemies.filter((e) => e.hp > 0)) {
       for (
@@ -77,6 +89,7 @@ export function createBattleController(
         i < (enemy.multiAttack ? enemy.attackCount || 2 : 1);
         i++
       ) {
+        await vfx.wait(0);
         const hero = chooseHero(state, state.lastEnemyTarget, rng);
         if (!hero) break;
         state.lastEnemyTarget = hero.id;
@@ -91,37 +104,73 @@ export function createBattleController(
     state.phase = "swap";
     const valid = isValidSwap(state.board, a, b);
     await vfx.swap(a, b);
+    ensureActive();
     state.board = swapped(state.board, a, b);
     view.board.render(state.board);
     if (!valid) {
       await vfx.swap(a, b);
+      ensureActive();
       state.board = swapped(state.board, a, b);
       view.board.render(state.board);
       state.phase = "idle";
       return false;
     }
     state.turn++;
+    const resolveResult = {
+      totalClearedByElement: Object.fromEntries(
+        ["WOOD", "FIRE", "WATER", "EARTH", "LIGHT", "DARK"].map((e) => [e, 0]),
+      ),
+      matchedGroups: [],
+      cascadesCount: 0,
+      totalTilesCleared: 0,
+      specialTriggered: [],
+      hazardsResolved: [],
+      attacks: [],
+    };
     let swap = [b, a];
-    for (let cascade = 0; cascade < MATCH_CONFIG.maxCascades; cascade++) {
+    for (let cascade = 0; ; cascade++) {
       const step = resolveStep(state.board, { swap });
       swap = null;
       if (!step.clear.length) break;
       state.phase = "resolving";
       await vfx.clear(step);
+      ensureActive();
       const before = state.board;
       state.board = fallAndRefill(state.board, step, rng);
       view.board.render(state.board);
       await vfx.fall(before, state.board);
-      for (const match of step.attacks) {
-        const event = heroAttack(state, match);
-        if (!event) continue;
-        await present(event);
-        await vfx.wait(T.heroGap);
+      ensureActive();
+      resolveResult.cascadesCount = cascade;
+      resolveResult.matchedGroups.push(
+        ...step.groups.map((g) => ({ ...g, cascadeIndex: cascade })),
+      );
+      resolveResult.specialTriggered.push(
+        ...step.activations.map((a) => ({ ...a, cascadeIndex: cascade })),
+      );
+      resolveResult.attacks.push(
+        ...step.attacks.map((a) => ({ ...a, cascadeIndex: cascade })),
+      );
+      for (const index of step.clear) {
+        const tile = before[index];
+        resolveResult.totalTilesCleared++;
+        resolveResult.totalClearedByElement[tile.element]++;
+        if (tile.hazardType)
+          resolveResult.hazardsResolved.push({
+            id: tile.id,
+            index,
+            type: tile.hazardType,
+            cascadeIndex: cascade,
+          });
       }
-      if (cascade === MATCH_CONFIG.maxCascades - 1) {
-        state.board = shuffle(state.board, rng);
-        view.board.render(state.board);
-      }
+    }
+    state.resolveResult = resolveResult;
+    state.phase = "hero";
+    for (const match of resolveResult.attacks) {
+      await vfx.wait(0);
+      const event = heroAttack(state, match);
+      if (!event) continue;
+      await present(event);
+      await vfx.wait(T.heroGap);
     }
     if (state.enemies.some((e) => e.hp > 0)) await enemyPhase();
     await finish();
@@ -141,6 +190,7 @@ export function createBattleController(
       events = ultimate(state, hero);
       return vfx.ultimateImpact(events, render);
     });
+    ensureActive();
     for (const event of events)
       if (event.dead && state.enemies.some((e) => e.uid === event.target))
         await vfx.death(event.target);
@@ -154,5 +204,22 @@ export function createBattleController(
       render();
     }
   }
-  return { move, useUltimate, select, canInput, ensureMoves, render };
+  const cancellable =
+    (fn) =>
+    async (...args) => {
+      try {
+        return await fn(...args);
+      } catch (error) {
+        if (state.disposed && error.name === "AbortError") return false;
+        throw error;
+      }
+    };
+  return {
+    move: cancellable(move),
+    useUltimate: cancellable(useUltimate),
+    select,
+    canInput,
+    ensureMoves,
+    render,
+  };
 }

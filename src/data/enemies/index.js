@@ -20,6 +20,16 @@ export const ENEMIES = Object.fromEntries(
         attackVfx: "SLIME_SPLASH",
         deathVfx: "GREEN_DISSOLVE",
         multiAttack: false,
+        render: {
+          idleScale: 1,
+          attackScale: i === 0 ? 1.1 : 1,
+          idleOffsetX: 0,
+          idleOffsetY: i === 0 ? 8.85 : 0,
+          attackOffsetX: 0,
+          attackOffsetY: i === 0 ? 5.96 : 0,
+          anchorX: 0.5,
+          anchorY: 1,
+        },
       },
     ];
   }),

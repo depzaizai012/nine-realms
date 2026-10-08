@@ -1,8 +1,10 @@
 import "./styles/base.css";
 import "./core/vfx/battle-vfx.css";
-import { mountBattle } from "./screens/battleScreen.js";
+import { createGameRouter } from "./core/appRouter.js";
 import { preloadStage } from "./data/assets/preloader.js";
 import { installAssetFallbacks } from "./data/assets/manifest.js";
 installAssetFallbacks(document.querySelector("#app"));
 await preloadStage();
-mountBattle(document.querySelector("#app"));
+const router = createGameRouter(document.querySelector("#app"));
+router.startBattle();
+if (import.meta.env.DEV) window.__gameRouter = router;

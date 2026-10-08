@@ -188,6 +188,7 @@ h1 {
   z-index: 2;
 }
 .enemy {
+  aspect-ratio: 1;
   position: relative;
   width: 37%;
   max-width: 130px;
@@ -198,13 +199,195 @@ h1 {
 }
 .enemy img {
   width: 100%;
-  height: auto;
+  height: 100%;
   max-height: 170px;
   object-fit: contain;
-  position: relative;
+  position: absolute;
+  left: 0;
+  bottom: 0;
   z-index: 1;
-  animation: idle 10s infinite ease-in-out;
+  transition: opacity 150ms ease;
   filter: drop-shadow(0 6px 4px #0009);
+}
+.enemy-idle-wrapper,
+.enemy-drift-wrapper,
+.enemy-action-wrapper,
+.enemy-vfx-layer {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 100%;
+  pointer-events: none;
+}
+.enemy-idle-wrapper {
+  animation: enemy-breathe var(--breathing-duration) ease-in-out infinite;
+  animation-delay: var(--idle-phase);
+}
+.enemy-drift-wrapper {
+  animation:
+    enemy-drift 8.5s ease-in-out infinite,
+    enemy-sway 11s ease-in-out infinite;
+  animation-delay: var(--idle-phase);
+}
+.enemy-attacking .enemy-idle-wrapper,
+.enemy-attacking .enemy-drift-wrapper {
+  animation-play-state: paused;
+}
+.sprite-attack {
+  opacity: 0;
+}
+.enemy-attacking .sprite-idle {
+  opacity: 0;
+}
+.enemy-attacking .sprite-attack {
+  opacity: 1;
+}
+@keyframes enemy-breathe {
+  50% {
+    scale: 1.004 0.996;
+  }
+}
+@keyframes enemy-drift {
+  50% {
+    translate: 0 -1.5px;
+  }
+}
+@keyframes enemy-sway {
+  30% {
+    transform: translateX(0.8px);
+  }
+  70% {
+    transform: translateX(-0.6px);
+  }
+}
+.gem .hazard {
+  animation: hazard-pulse 2.8s ease-in-out infinite;
+  animation-delay: var(--gem-phase);
+}
+.gem[data-hazard="BURNING"] .hazard {
+  animation-name: hazard-fire;
+  animation-duration: 2.2s;
+}
+.gem[data-hazard="FROZEN"] .hazard {
+  animation-name: hazard-ice;
+  animation-duration: 3.2s;
+}
+.gem[data-hazard="ROOT"] .hazard {
+  animation-duration: 3s;
+}
+.gem[data-hazard="VOID"] .hazard {
+  animation:
+    hazard-pulse 3.2s ease-in-out infinite,
+    void-turn 40s linear infinite;
+}
+.gem[data-special^="LINE"] .special {
+  animation: line-charged 2.5s ease-in-out infinite;
+  animation-delay: var(--gem-phase);
+}
+.gem[data-special^="LINE"]::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  background: #eaffff;
+  box-shadow: 0 0 7px #baffff;
+  border-radius: 50%;
+  animation: charge-sweep 2.5s ease-in-out infinite;
+  animation-delay: var(--gem-phase);
+}
+.gem[data-special="LINE_HORIZONTAL"]::after {
+  width: 12%;
+  height: 3px;
+  top: 50%;
+  left: 12%;
+}
+.gem[data-special="LINE_VERTICAL"]::after {
+  height: 12%;
+  width: 3px;
+  left: 50%;
+  top: 12%;
+  animation-name: charge-sweep-v;
+}
+@keyframes hazard-pulse {
+  0%,
+  100% {
+    scale: 1;
+    opacity: 0.92;
+  }
+  50% {
+    scale: 1.04;
+    opacity: 1;
+  }
+}
+@keyframes hazard-fire {
+  0%,
+  100% {
+    scale: 1;
+    opacity: 0.92;
+    filter: brightness(1);
+  }
+  45%,
+  60% {
+    scale: 1.035;
+    opacity: 1;
+    filter: brightness(1.2);
+  }
+}
+@keyframes hazard-ice {
+  0%,
+  100% {
+    opacity: 0.92;
+    filter: drop-shadow(0 0 1px #a9ecff);
+  }
+  50% {
+    scale: 1.02;
+    opacity: 1;
+    filter: brightness(1.15) drop-shadow(0 0 4px #a9ecff);
+  }
+}
+@keyframes void-turn {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes line-charged {
+  50% {
+    scale: 1.03;
+    filter: brightness(1.25) drop-shadow(0 0 4px #c5ffff);
+  }
+}
+@keyframes charge-sweep {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.85;
+  }
+  70% {
+    left: 76%;
+    opacity: 0.85;
+  }
+}
+@keyframes charge-sweep-v {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.85;
+  }
+  70% {
+    top: 76%;
+    opacity: 0.85;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .enemy-idle-wrapper,
+  .enemy-drift-wrapper,
+  .gem .hazard,
+  .gem .special,
+  .gem::after {
+    animation: none !important;
+  }
 }
 .enemy.elite {
   width: 43%;
@@ -410,19 +593,6 @@ h1 {
   box-shadow: inset 0 0 9px #f3da84;
   border-radius: 5px;
 }
-footer {
-  display: flex;
-  justify-content: space-between;
-  padding: 3px 12px 8px;
-  font: 7px system-ui;
-  color: #819783;
-  letter-spacing: 0.4px;
-  flex-shrink: 0;
-}
-footer > span:first-child {
-  color: #cfb474;
-  letter-spacing: 1.8px;
-}
 .toast {
   position: absolute;
   left: 50%;
@@ -469,9 +639,6 @@ footer > span:first-child {
   }
   .board-shell {
     aspect-ratio: 1.15;
-  }
-  footer {
-    padding-bottom: 3px;
   }
 }
 @media (min-width: 420px) {

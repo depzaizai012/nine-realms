@@ -20,10 +20,14 @@ export function createBoardView(root) {
   });
   return {
     cells,
-    render(board) {
+    render(board, indices = null) {
       board.forEach((g, i) => {
+        if (indices && !indices.includes(i)) return;
         const el = cells[i];
         el.dataset.gem = g.id;
+        el.dataset.special = g.specialType || "";
+        el.dataset.hazard = g.hazardType || "";
+        el.style.setProperty("--gem-phase", `${-(i % 7) * 0.31}s`);
         el.style.visibility = "";
         el.setAttribute(
           "aria-label",

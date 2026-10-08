@@ -81,6 +81,7 @@ export function createBoardVfx(ctx) {
     }
     beam.dataset.cells = indices.join(",");
     await Promise.all([
+      shake({ intensity: "LIGHT", duration: 160 }),
       animate(
         beam,
         [
@@ -118,48 +119,83 @@ export function createBoardVfx(ctx) {
         { filter: "brightness(2)", transform: "scale(1.14)", offset: 0.65 },
         { filter: "brightness(1)", transform: "scale(1)" },
       ],
-      type.startsWith("LINE") ? T.lineCharge : T.clear,
+      type.startsWith("LINE") ? T.lineCharge : 220,
     );
     if (type.startsWith("LINE")) await line(activation, step, handled, pending);
     else if (type === "BOMB") {
       const ring = spawn("explosion", p, "#ffd37c");
       await hitStop(T.bombStop);
       await Promise.all([
-        shake(),
+        shake({ intensity: "MEDIUM", duration: 240 }),
         animate(
           ring,
           [
             { opacity: 1, transform: "translate(-50%,-50%) scale(.1)" },
             { opacity: 0, transform: "translate(-50%,-50%) scale(2)" },
           ],
-          T.bomb,
+          240,
         ),
       ]);
       ring.remove();
     } else {
-      const rays = step.clear
-        .filter(
-          (i) =>
-            i === activation.index ||
-            activation.element === "ALL" ||
-            state.board[i].element === activation.element,
-        )
-        .map((i) => {
-          const q = position(boardView.cells[i]),
-            ray = spawn("prism-ray", p, "#eed6ff");
-          ray.style.width = `${Math.hypot(q.x - p.x, q.y - p.y)}px`;
-          ray.style.transform = `rotate(${Math.atan2(q.y - p.y, q.x - p.x)}rad)`;
-          return ray;
-        });
-      await animate(
-        cell,
-        [
-          { filter: "hue-rotate(0deg) brightness(2)" },
-          { filter: "hue-rotate(360deg) brightness(3)" },
-        ],
-        T.prism,
+      const targets = step.clear.filter(
+        (i) =>
+          i === activation.index ||
+          activation.element === "ALL" ||
+          state.board[i].element === activation.element,
       );
-      rays.forEach((el) => el.remove());
+      const rays = [];
+      try {
+        for (const i of targets.filter((i) => i !== activation.index)) {
+          const q = position(boardView.cells[i]);
+          const length = Math.hypot(q.x - p.x, q.y - p.y);
+          const ray = spawn("prism-ray", p, color);
+          rays.push(ray);
+          Object.assign(ray.style, {
+            width: `${length}px`,
+            height: "24px",
+            background: "none",
+            boxShadow: "none",
+            filter: `drop-shadow(0 0 4px ${color})`,
+            transformOrigin: "0 50%",
+            transform: `translateY(-50%) rotate(${Math.atan2(q.y - p.y, q.x - p.x)}rad)`,
+          });
+          ray.innerHTML = `<svg width="100%" height="24" viewBox="0 0 ${length} 24" overflow="visible"><path d="M0 12 L${length * 0.24} 6 L${length * 0.4} 17 L${length * 0.57} 8 L${length * 0.76} 16 L${length} 12 M${length * 0.4} 17 L${length * 0.52} 22 M${length * 0.57} 8 L${length * 0.65} 2" fill="none" stroke="${color}" stroke-width="6" opacity=".7"/><path d="M0 12 L${length * 0.24} 6 L${length * 0.4} 17 L${length * 0.57} 8 L${length * 0.76} 16 L${length} 12" fill="none" stroke="#fff" stroke-width="2"/></svg>`;
+        }
+        await Promise.all(
+          rays.map((ray) =>
+            animate(
+              ray,
+              [
+                { opacity: 0 },
+                { opacity: 1, offset: 0.25 },
+                { opacity: 0.55, offset: 0.6 },
+                { opacity: 1 },
+              ],
+              280,
+            ),
+          ),
+        );
+        await Promise.all(
+          targets.map((i) =>
+            animate(
+              boardView.cells[i],
+              [
+                { filter: "brightness(1)" },
+                { filter: "brightness(2.5) drop-shadow(0 0 6px #efd5ff)" },
+              ],
+              180,
+            ),
+          ),
+        );
+        await hitStop(55);
+        await Promise.all([
+          shake({ intensity: "LIGHT", duration: 180 }),
+          ...targets.map((i) => explode(i, handled, pending)),
+        ]);
+      } finally {
+        rays.forEach((el) => el.remove());
+      }
     }
     if (handled.has(activation.index)) cell.style.visibility = "hidden";
   }
@@ -171,6 +207,26 @@ export function createBoardVfx(ctx) {
     await Promise.all(
       step.clear.map((index) => explode(index, handled, pending)),
     );
+    if (step.creations.length) {
+      const creations = new Map(step.creations);
+      const indices = [...creations.keys()];
+      boardView.render(
+        state.board.map((g, i) => creations.get(i) || g),
+        indices,
+      );
+      await Promise.all(
+        indices.map((i) =>
+          animate(
+            boardView.cells[i],
+            [
+              { filter: "brightness(2)", transform: "scale(.8)" },
+              { filter: "brightness(1)", transform: "scale(1)" },
+            ],
+            160,
+          ),
+        ),
+      );
+    }
   }
   async function fall(before, after = state.board) {
     if (!before) return;

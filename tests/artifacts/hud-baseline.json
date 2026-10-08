@@ -1,0 +1,76 @@
+{
+  "assets": {
+    "HUD_HERO_FRAME_NORMAL": {
+      "width": 1254,
+      "height": 1254,
+      "bounds": {
+        "left": 114,
+        "top": 136,
+        "right": 1133,
+        "bottom": 1109
+      }
+    },
+    "HUD_HERO_FRAME_ULT_READY": {
+      "width": 1254,
+      "height": 1254,
+      "bounds": {
+        "left": 74,
+        "top": 105,
+        "right": 1175,
+        "bottom": 1159
+      }
+    },
+    "HUD_HERO_ULT_GLOW_OVERLAY": {
+      "width": 1254,
+      "height": 1254,
+      "bounds": {
+        "left": 63,
+        "top": 73,
+        "right": 1215,
+        "bottom": 1180
+      }
+    },
+    "HUD_HERO_BAR_BG": {
+      "width": 1774,
+      "height": 887,
+      "bounds": {
+        "left": 107,
+        "top": 323,
+        "right": 1667,
+        "bottom": 602
+      }
+    },
+    "HUD_STATUS_ICON_SLOT": {
+      "width": 1254,
+      "height": 1254,
+      "bounds": {
+        "left": 308,
+        "top": 327,
+        "right": 943,
+        "bottom": 935
+      }
+    },
+    "HUD_STATUS_BAR_BG": {
+      "width": 2172,
+      "height": 724,
+      "bounds": {
+        "left": 286,
+        "top": 228,
+        "right": 1885,
+        "bottom": 478
+      }
+    }
+  },
+  "protectedFiles": {
+    "src/core/match3/engine.js": "c483a6b09db2f5038b8e4643d14c0ba875b07f01b0001d5dffbe53a6397c8afc",
+    "src/core/battle/engine.js": "0e39e336c9fa5d3ac5ce658584c94a5f6f4c40f375b9f5b7bedbbd16b9fe2d5e",
+    "src/core/battle/battleController.js": "9950a16db9f62f652340e15e971132f723bd4c37f09837449ae60548a60c1610",
+    "src/core/vfx/battleVfxController.js": "40dd5731d6b9d61aae4b4c13ac108e2808d8fcb8b74297c59532c3ec950329a9",
+    "src/core/vfx/heroActionVfxController.js": "99f55ecf32e4d3b1097b215be77754b5ac1c656986cf3c2cfcba559872009da5",
+    "src/core/vfx/boardVfxController.js": "e4c5f35703f2e1165d9852a3d36ff52e4ec4c35bcd576470f8eed651479c32b6",
+    "src/components/enemy/enemyView.js": "16001f92bfec828a580fbff03533820c4efa364bd761ad359584415f9f638ae2",
+    "src/data/enemies/index.js": "db7cf7fe05119bb9e3cb691ed8df52c21971726d436004627e732a69c9661604",
+    "src/data/heroes/index.js": "66859373c1c7f008c2907e6b12d4cbae81377e04319d02a1a37a519a4132685b",
+    "src/data/stages/index.js": "a478718dd671a71633115255703c91912ef1e71c2a1573ba893596690ab8ceeb"
+  }
+}

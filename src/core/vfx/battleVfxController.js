@@ -1,50 +1,16 @@
 import { VFX_CONFIG as T } from "./vfxConfig.js";
 import { VFX_REGISTRY } from "./vfxRegistry.js";
 import { COLORS } from "../../data/elements/index.js";
-import { getEnemyAsset } from "../../data/assets/manifest.js";
 import { createHeroActionVfx } from "./heroActionVfxController.js";
 import { createBoardVfx } from "./boardVfxController.js";
+import { createBattleClock } from "../battle/battleClock.js";
 
 export function createVfx(root, state, boardView) {
   const layer = root.querySelector(".vfx-layer"),
     numberLayer = root.querySelector(".number-layer");
   const actor = (id) => root.querySelector(`[data-actor="${id}"]`);
-  const wait = async (ms) => {
-    let remaining = ms;
-    while (remaining > 0) {
-      const start = performance.now();
-      await new Promise((r) =>
-        setTimeout(
-          r,
-          state.paused ? T.tick : Math.min(remaining / state.speed, T.tick),
-        ),
-      );
-      if (!state.paused) remaining -= (performance.now() - start) * state.speed;
-    }
-  };
-  const animate = async (el, frames, ms) => {
-    if (!el) return;
-    const a = el.animate(frames, {
-      duration: ms,
-      easing: "ease-in-out",
-      fill: "none",
-    });
-    a.playbackRate = state.speed;
-    const update = () => {
-      a.playbackRate = state.speed;
-      if (state.paused || root.classList.contains("hit-stop")) {
-        if (a.playState === "running") a.pause();
-      } else if (a.playState === "paused") a.play();
-    };
-    update();
-    const interval = setInterval(update, T.tick);
-    try {
-      await a.finished;
-    } catch {
-    } finally {
-      clearInterval(interval);
-    }
-  };
+  const clock = createBattleClock(state, root),
+    { wait, animate } = clock;
   async function hitStop(duration) {
     const animations = root
       .getAnimations({ subtree: true })
@@ -199,47 +165,64 @@ export function createVfx(root, state, boardView) {
     const from = actor(event.source),
       to = actor(event.target);
     if (!from || !to) return;
-    const img = from.querySelector("img");
-    img.src = getEnemyAsset(enemy.assetId, "attack");
-    await animate(
-      from,
-      [
-        { filter: "brightness(1)", transform: "scale(1)" },
-        { filter: "brightness(1.6)", transform: "scale(1.06)" },
-        { filter: "brightness(1)", transform: "scale(1)" },
-      ],
-      T.enemyAttack * 0.25,
-    );
-    const a = center(from),
-      b = center(to),
-      projectile = effect(
-        `projectile ${VFX_REGISTRY[event.vfx]?.shape || "bolt"}`,
-        a.x,
-        a.y,
-        COLORS[event.element],
+    const motion = from.querySelector(".enemy-action-wrapper");
+    from.classList.add("enemy-attacking");
+    try {
+      await animate(
+        motion,
+        [
+          { filter: "brightness(1)", transform: "translateY(0)" },
+          {
+            filter: "brightness(1.3)",
+            transform: "translateY(-2px)",
+            offset: 0.4,
+          },
+          { filter: "brightness(1)", transform: "translateY(8px)" },
+        ],
+        T.enemyAttack * 0.25,
       );
-    await animate(
-      projectile,
-      [
-        { transform: "translate(-50%,-50%) scale(.6)", opacity: 0 },
-        {
-          transform: "translate(-50%,-50%) scale(1)",
-          opacity: 1,
-          offset: 0.15,
-        },
-        {
-          transform: `translate(calc(-50% + ${b.x - a.x}px),calc(-50% + ${b.y - a.y}px)) scale(1.2)`,
-          opacity: 1,
-        },
-      ],
-      T.enemyAttack * 0.5,
-    );
-    projectile.remove();
-    void particles(to, COLORS[event.element]);
-    await hitStop(event.crit ? T.critStop : T.hitStop);
-    await hit(to, event);
-    onImpact();
-    img.src = getEnemyAsset(enemy.assetId, "idle");
+      motion.style.transform = "translateY(8px)";
+      const a = center(from),
+        b = center(to),
+        projectile = effect(
+          `projectile ${VFX_REGISTRY[event.vfx]?.shape || "bolt"}`,
+          a.x,
+          a.y,
+          COLORS[event.element],
+        );
+      await animate(
+        projectile,
+        [
+          { transform: "translate(-50%,-50%) scale(.6)", opacity: 0 },
+          {
+            transform: "translate(-50%,-50%) scale(1)",
+            opacity: 1,
+            offset: 0.15,
+          },
+          {
+            transform: `translate(calc(-50% + ${b.x - a.x}px),calc(-50% + ${b.y - a.y}px)) scale(1.2)`,
+            opacity: 1,
+          },
+        ],
+        T.enemyAttack * 0.5,
+      );
+      projectile.remove();
+      void particles(to, COLORS[event.element]);
+      await hitStop(event.crit ? T.critStop : T.hitStop);
+      await hit(to, event);
+      onImpact();
+      await animate(
+        motion,
+        [{ transform: "translateY(8px)" }, { transform: "translateY(0)" }],
+        180,
+      );
+      motion.style.transform = "";
+      from.classList.remove("enemy-attacking");
+      await wait(150);
+    } finally {
+      motion.style.transform = "";
+      from.classList.remove("enemy-attacking");
+    }
   }
   async function death(id) {
     const el = actor(id);
@@ -291,16 +274,17 @@ export function createVfx(root, state, boardView) {
       ),
     ]);
   }
-  async function shake() {
+  async function shake({ intensity = "LIGHT", duration = 180 } = {}) {
+    const amount = { LIGHT: 2, MEDIUM: 4, HEAVY: 6 }[intensity] || 2;
     await animate(
-      root.querySelector(".visual-root"),
+      root.querySelector(".board-shell"),
       [
         { transform: "translateX(0)" },
-        { transform: "translateX(-3px)" },
-        { transform: "translateX(3px)" },
+        { transform: `translateX(-${amount}px)` },
+        { transform: `translateX(${amount}px)` },
         { transform: "translateX(0)" },
       ],
-      T.clear,
+      duration,
     );
   }
   const ctx = {
@@ -317,11 +301,15 @@ export function createVfx(root, state, boardView) {
     hit,
     hitStop,
     shake,
+    playBoardShake: shake,
+    playHitStop: hitStop,
   };
   const heroVfx = createHeroActionVfx(ctx),
     boardVfx = createBoardVfx(ctx);
   return {
     wait,
+    clock,
+    dispose: clock.dispose,
     animate,
     attack,
     hit,
@@ -331,6 +319,8 @@ export function createVfx(root, state, boardView) {
     fall: boardVfx.fall,
     number,
     shake,
+    playBoardShake: shake,
+    playHitStop: hitStop,
     ultimate: heroVfx.ultimate,
     ultimateImpact: heroVfx.ultimateImpact,
   };
