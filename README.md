@@ -1,6 +1,6 @@
 # Legend of the Nine Realms
 
-A new Vite / vanilla JavaScript mobile battle game. Only Stage 1-1, **Whispers in the Canopy**, is playable.
+A Vite / vanilla JavaScript fantasy mobile match-3 RPG prototype. The default entry screen is the Verdant Realm Stage Select. Only Stage 1-1, **Whispers in the Canopy**, has a playable Battle; Stage 1-2 through 1-10 appear as locked route nodes and are not fake battles.
 
 ```sh
 npm install
@@ -31,11 +31,20 @@ Confirmed targets: GitHub [depzaizai012/nine-realms](https://github.com/depzaiza
 
 After explicit approval to publish, push the `main` branch and import that repository in Vercel. Select project `9realms`, root directory `.`, Vite, Node 24.x, and production branch `main`. `vercel.json` sets install `npm ci --include=dev`, build `npm run build`, output `dist`, and SPA rewrites. Files under `/assets` and missing filenames with extensions stay outside the SPA fallback, so a wrong asset path cannot silently return HTML. These settings follow [Vercel's Vite SPA guidance](https://vercel.com/docs/frameworks/frontend/vite) and [Node.js version settings](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions).
 
-The current Battle/Town router keeps screen state in memory. Direct non-asset URL refreshes load the existing SPA entry; refreshing starts Stage 1-1 rather than inventing URL-driven game screens. The requested `.vercel.app` address must be available and assigned by Vercel when the project is created/linked.
+The Battle/Town/Stage Select router keeps screen state in memory. The root URL `/` launches Stage Select, and `/battle/1-1` or `/?screen=battle` launches the existing playable Battle directly (used by legacy tests). Direct non-asset URL refreshes load the SPA entry; unsupported deep URLs fall back to Stage Select. The requested `.vercel.app` address must be available and assigned by Vercel when the project is created/linked.
 
 See [DEPLOYMENT_PREPARATION.md](DEPLOYMENT_PREPARATION.md) for exact commit/push commands, destination checks and iOS/Android testing steps. Do not commit `.env` files, credentials or `.vercel` linkage files.
 
 Swipe adjacent gems, or tap two adjacent cells. Arrow keys swap the focused cell. Tap an enemy to select it. Match a hero's element to attack and gain energy. A gold energy bar marks an available ultimate; tap the hero to activate it. The top HUD has production Help, x2 and Pause controls. Pause offers Replay and Back to Town; outside/Escape resumes. See [BATTLE_PRESENTATION_REPORT.md](BATTLE_PRESENTATION_REPORT.md) for current asset/background/grounding updates.
+
+## Verdant Realm Stage Select (prototype)
+
+- The default `/` route shows a portrait fantasy route map with ten data-driven stages. Stage 1-1 is the only battle that can be launched; all later stages are visible, locked, or marked "Coming soon" when unlocked.
+- The victory result now records a local save in `localStorage`, key `nine-realms.progress.v1`, with `saveVersion`, unlocked/cleared stages, best stars and best turn count. A victory unlocks the next stage's path without pretending its Battle exists. Defeat does not change progression.
+- Use the result dialog's **Stage Select** button to return from Battle, or **Pause → Back to Town → Stage Select**. The Town placeholder is preserved for backwards compatibility. The real Home Screen can later replace this placeholder.
+- The stage definitions in `src/data/stages/stageSelect.js` are separate from Battle configurations in `src/data/stages/index.js`. The saved progression API in `src/core/progression/gameSaveService.js` can later use a cloud-backed adapter.
+- All images in this screen use existing Verdant assets or CSS ornaments; it does not depend on uncommitted Home or map assets.
+- Prototype saves are per-browser and can be cleared by the user. There is no database, user login, rewards server, or cross-device sync.
 
 ## Architecture
 
