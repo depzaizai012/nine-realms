@@ -10,7 +10,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test tests/engine.test.js tests/polish.test.js tests/hud.test.js tests/controls.test.js tests/backgrounds.test.js",
+    "test": "node --test tests/engine.test.js tests/polish.test.js tests/hud.test.js tests/controls.test.js tests/backgrounds.test.js tests/stage-select.test.js",
     "test:browser": "playwright test",
     "assets:prepare": "node scripts/prepare-assets.js",
     "assets:scan": "node scripts/rescan-assets.js",
