@@ -1,23 +1,8 @@
 import { HEROES } from "../data/heroes/index.js";
 import { MANIFEST } from "../data/assets/manifest.js";
-import { STARTER_HERO_IDS, STARTER_SUMMON_ID } from "../data/starterRoster.js";
+import { STARTER_HERO_IDS } from "../data/starterRoster.js";
+import { grantStarterHeroes } from "../core/story/starterProgress.js";
 import "../styles/starterSummon.css";
-
-const SAVE_KEY = "nine-realms:starter-roster:v1";
-export function grantStarterHeroes(storage) {
-  // Idempotent so replaying the cutscene does not grant duplicates.
-  let record = { summonId: STARTER_SUMMON_ID, heroIds: [] };
-  try {
-    const existing = JSON.parse(storage.getItem(SAVE_KEY) || "null");
-    if (existing && Array.isArray(existing.heroIds)) {
-      record.heroIds = existing.heroIds.filter((id) => typeof id === "string");
-    }
-  } catch { /* New player / unavailable browser storage. */ }
-  record.heroIds = [...new Set([...record.heroIds, ...STARTER_HERO_IDS])];
-  record.grantedAt ||= Date.now();
-  try { storage.setItem(SAVE_KEY, JSON.stringify(record)); } catch { /* Story remains playable offline. */ }
-  return record;
-}
 
 export function mountStarterSummon(app, { onComplete } = {}) {
   const controller = new AbortController();
