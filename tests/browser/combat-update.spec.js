@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test("enemy crossfade preserves root and ring, pauses idle then resumes", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?screen=battle");
   const initial = await page.evaluate(() => {
     const enemies = [...document.querySelectorAll(".enemy")];
     window.__rects = enemies.map((el) => ({
@@ -70,7 +70,7 @@ test("enemy crossfade preserves root and ring, pauses idle then resumes", async 
 test("Prism connects every target before explosion and cleans VFX; hazard/line animate", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?screen=battle");
   const counts = await page.evaluate(async () => {
     const { state, view, vfx } = window.__battle;
     view.dismissMessage();
