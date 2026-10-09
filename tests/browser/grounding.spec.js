@@ -13,7 +13,7 @@ for (const size of [
       if (r.status() >= 400) errors.push(r.url());
     });
     await page.setViewportSize(size);
-    await page.goto("/");
+    await page.goto("/?screen=battle");
     await expect(page.locator(".enemy")).toHaveCount(2);
     await page.evaluate(() => window.__battle.view.dismissMessage());
     expect(
