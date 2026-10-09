@@ -44,7 +44,7 @@ async function sawEffect(page, cls) {
 test("FIRE swipe drives Fenrir VFX and damage, enemy feedback, invalid rollback", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?screen=battle");
   await observeEffects(page);
   await page.evaluate(() => {
     const { state, view } = window.__battle;
@@ -112,7 +112,7 @@ test("FIRE swipe drives Fenrir VFX and damage, enemy feedback, invalid rollback"
 test("line beams, bomb explosion, prism rays, chain, death and heal particles", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?screen=battle");
   await page.evaluate(() => (window.__battle.state.speed = 2));
   await observeEffects(page);
   for (const type of ["LINE_HORIZONTAL", "LINE_VERTICAL", "BOMB", "PRISM"]) {
@@ -180,7 +180,7 @@ test("line beams, bomb explosion, prism rays, chain, death and heal particles", 
 test("stage preloader requests its 46 stage, HUD and control assets with zero missing files", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?screen=battle");
   const audit = await page.evaluate(async () => {
     const { stageAssets, MANIFEST } =
       await import("/src/data/assets/manifest.js");
