@@ -1,6 +1,7 @@
 import { mountBattle } from "../screens/battleScreen.js";
 import { mountTown } from "../screens/townScreen.js";
 import { mountCutscene } from "../screens/cutsceneScreen.js";
+import { mountStarterSummon } from "../screens/starterSummonScreen.js";
 
 export function createGameRouter(app) {
   let current, screen = "BATTLE";
@@ -19,10 +20,16 @@ export function createGameRouter(app) {
     current = mountTown(app, id, () => startBattle(id));
     return current;
   };
+  const showStarterSummon = () => {
+    current?.destroy();
+    screen = "STARTER_SUMMON";
+    current = mountStarterSummon(app, { onComplete: () => startBattle("1-1") });
+    return current;
+  };
   const playIntro = () => {
     current?.destroy();
     screen = "CUTSCENE_INTRO";
-    current = mountCutscene(app, "intro", { onComplete: () => startBattle("1-1") });
+    current = mountCutscene(app, "intro", { onComplete: () => showStarterSummon() });
     return current;
   };
   const playEnding = () => {
@@ -36,11 +43,12 @@ export function createGameRouter(app) {
     const preview = new URLSearchParams(window.location.search).get("cutscene");
     if (preview === "intro") return playIntro();
     if (preview === "ending") return playEnding();
+    if (new URLSearchParams(window.location.search).get("summon") === "starter") return showStarterSummon();
     // Preserve the existing one-stage battle experience and browser tests.
     return startBattle("1-1");
   };
   return {
-    start, startBattle, showTown, playIntro, playEnding,
+    start, startBattle, showTown, playIntro, playEnding, showStarterSummon,
     get screen() { return screen; },
   };
 }
