@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 async function setup(page) {
-  await page.goto("/");
+  await page.goto("/?screen=battle");
   await page.evaluate(() => {
     window.__animations = [];
     window.__actions = [];
