@@ -1,8 +1,9 @@
 import { getBattleBackground } from "../data/assets/manifest.js";
 import { STAGES } from "../data/stages/index.js";
-export function mountTown(app, stageId, onBattle) {
-  app.innerHTML = `<main class="game town-screen" style="background-image:url('${getBattleBackground(STAGES[stageId].background)}')"><section><p>NINE REALMS</p><h1>Town</h1><p>The town hub is under construction.</p><button class="primary">Return to Stage ${stageId}</button></section></main>`;
-  app.querySelector("button").onclick = onBattle;
+export function mountTown(app, stageId = "1-1", onBattle, onStageSelect) {
+  app.innerHTML = `<main class="game town-screen" style="background-image:url('${getBattleBackground(STAGES[stageId].background)}')"><section><p>NINE REALMS</p><h1>Town</h1><p>The town hub is under construction.</p><button class="primary">Return to Stage ${stageId}</button><button class="stage-select-link">Stage Select</button></section></main>`;
+  app.querySelector(".primary").onclick = onBattle;
+  app.querySelector(".stage-select-link").onclick = onStageSelect;
   return {
     destroy() {
       app.replaceChildren();
