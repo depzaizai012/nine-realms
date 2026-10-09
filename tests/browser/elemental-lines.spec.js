@@ -10,7 +10,7 @@ test("all elemental lines use one unrotated charged image at mobile sizes", asyn
   });
   for (const width of [360, 390, 412]) {
     await page.setViewportSize({ width, height: 844 });
-    await page.goto("/");
+    await page.goto("/?screen=battle");
     await page.evaluate(async () => {
       const { state, view } = window.__battle;
       const { ELEMENTS } = await import("/src/data/elements/index.js");

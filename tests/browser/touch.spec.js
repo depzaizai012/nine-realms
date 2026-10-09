@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 test("mobile touch swipe resolves one turn; pause stops in-flight resolution", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?screen=battle");
   const move = await page.evaluate(async () => {
     const { validMoves } = await import("/src/core/match3/engine.js");
     return validMoves(window.__battle.state.board)[0];

@@ -13,7 +13,7 @@ test("mobile layouts, production art, target, drag, pause and hints", async ({
     { width: 412, height: 915 },
   ]) {
     await page.setViewportSize(size);
-    await page.goto("/");
+    await page.goto("/?screen=battle");
     await expect(page.locator(".gem")).toHaveCount(42);
     await expect(page.locator(".hero-card")).toHaveCount(5);
     await expect(page.locator(".enemy")).toHaveCount(2);
@@ -89,7 +89,7 @@ test("mobile layouts, production art, target, drag, pause and hints", async ({
 test("real controller clears three waves; ultimates render healing; death removes after dissolve", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?screen=battle");
   await page.evaluate(() => {
     const { state } = window.__battle;
     state.speed = 30;

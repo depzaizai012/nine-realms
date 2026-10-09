@@ -4,7 +4,7 @@ test("Help pauses an enemy action and resumes exactly two actions; repeated over
 }) => {
   const errors = [];
   page.on("pageerror", (e) => errors.push(String(e)));
-  await page.goto("/");
+  await page.goto("/?screen=battle");
   await expect(page.locator(".hero-card")).toHaveCount(5);
   await page.evaluate(async () => {
     const { state, vfx, controller } = window.__battle;
@@ -74,7 +74,7 @@ test("new control/panel assets fail independently with named warnings and CSS fa
     await page.route(`**/assets/ui/${key}.png`, (route) =>
       route.fulfill({ status: 404, body: "missing" }),
     );
-  await page.goto("/");
+  await page.goto("/?screen=battle");
   await expect(page.locator(".gem")).toHaveCount(42);
   await page.locator(".speed").click();
   expect(

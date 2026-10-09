@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 async function open(page) {
-  await page.goto("/");
+  await page.goto("/?screen=battle");
   await expect(page.locator(".hero-card")).toHaveCount(5);
   await page.evaluate(() => window.__battle.view.dismissMessage());
 }
