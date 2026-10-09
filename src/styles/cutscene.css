@@ -1,0 +1,130 @@
+/* Story Mode • cinematic preview independent of the battle presentation. */
+.story-screen {
+  position: fixed; inset: 0; z-index: 900;
+  display: grid; place-items: center;
+  color: #f7f5e8; background: #030b11;
+  font-family: Georgia, "Times New Roman", serif;
+}
+.story-frame {
+  position: relative; isolation: isolate;
+  width: min(100%, 1040px); height: 100%; max-height: 100dvh;
+  overflow: hidden;
+  box-shadow: 0 0 85px #020704;
+}
+.story-background {
+  position: absolute; inset: -3%; z-index: -5;
+  background-position: center; background-size: cover;
+  animation: story-pan 12s linear both;
+  filter: saturate(.9);
+}
+.story-screen[data-motion="rush"] .story-background {animation-name: story-rush;}
+.story-screen[data-motion="rise"] .story-background {animation-name: story-rise;}
+.story-screen[data-mood="void"] .story-background {filter: brightness(.3) saturate(.7) hue-rotate(40deg);}
+.story-screen[data-mood="night"] .story-background {filter: brightness(.38) hue-rotate(20deg);}
+.story-screen[data-mood="reveal"] .story-background {filter: brightness(.32) saturate(.6) hue-rotate(75deg);}
+.story-screen[data-mood="fire"] .story-background {filter: brightness(.8) saturate(1.45);}
+.story-screen[data-mood="relief"] .story-background {filter: brightness(.75) saturate(.65);}
+.story-vignette {
+  pointer-events: none; position: absolute; inset: 0; z-index: -2;
+  background: linear-gradient(180deg,#030d15c9 0%,#0414132c 22%,#06181917 48%,#06100ccb 82%,#020a0aec 100%),
+    radial-gradient(ellipse at 50% 45%,transparent 15%,#02090bc4 110%);
+}
+.story-screen[data-mood="magic"] .story-vignette {background: radial-gradient(ellipse at 50% 60%,#32ae8a32,transparent 56%),linear-gradient(180deg,#03100dc9,transparent 40%,#020e0fef);}
+.story-screen[data-mood="danger"] .story-vignette {background: radial-gradient(ellipse at 70% 80%,#de553936,transparent 55%),linear-gradient(180deg,#100809bb,transparent 34%,#150a09ed);}
+.story-screen[data-mood="reveal"] .story-vignette {background: radial-gradient(ellipse at 50% 55%,#891e3883,transparent 70%),linear-gradient(180deg,#110607af,#04050add);}
+.story-screen[data-mood="fire"] .story-vignette {background: linear-gradient(180deg,#1006039e,transparent 35%,#240c09ee);}
+.story-motes {pointer-events: none; position:absolute; inset:0; opacity:.66; z-index:-1;
+  background-image:radial-gradient(#d6ffb9 1.5px,transparent 1.5px),radial-gradient(#c9e9ff 1px,transparent 1px);
+  background-size:101px 127px,151px 185px; background-position:14px 30px,80px 10px;
+  animation: story-motes 15s linear infinite;
+}
+.story-screen[data-mood="reveal"] .story-motes,.story-screen[data-mood="fire"] .story-motes {filter:hue-rotate(130deg);}
+.story-head {position:absolute; z-index:5; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center;
+  padding: max(19px,env(safe-area-inset-top)) max(18px,4%); gap:20px;
+  text-shadow:0 2px 8px #000;
+  font:700 11px/1.5 system-ui,sans-serif; letter-spacing:.2em; color:#e7d49a;
+}
+.story-step {font-variant-numeric:tabular-nums;color:#e7e9d4;}
+.story-middle {position:absolute; inset:20% 0 25%; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; pointer-events:none;}
+.story-shot-label {text-align:center; margin:0; padding:8px 18px; color:#e7e7c8;
+  letter-spacing:.3em; font:600 clamp(10px,1.4vw,13px)/1.5 system-ui,sans-serif;
+  text-shadow:0 2px 8px #000,0 0 20px #001;
+  opacity:.8; animation: story-fade 1.4s both;
+}
+.story-character {position:absolute; z-index:0; width:min(64vw,390px); height:min(65%,630px);
+  left:50%; bottom:17%; display:flex; align-items:flex-end; justify-content:center;
+  transform:translateX(-50%); filter:drop-shadow(0 15px 35px #000a);
+  animation:story-enter .95s cubic-bezier(.2,.7,.1,1) both; pointer-events:none;
+}
+.story-character img,.story-character svg {width:100%; height:100%; object-fit:contain; object-position:bottom;}
+.story-character[data-figure="crystal"] {width:min(46vw,270px); height:55%; bottom:21%;filter:drop-shadow(0 0 35px #41f9b5a1);animation:story-float 4s ease-in-out infinite;}
+.story-character[data-figure="portal"] {width:min(55vw,345px); height:65%;bottom:19%;filter:drop-shadow(0 0 25px #ee583b95);animation:story-float 5s ease-in-out infinite;}
+.story-character[data-figure="boss"] {width:min(92vw,730px); height:71%;bottom:15%;}
+.story-character[data-figure="aria"] {width:min(59vw,335px); height:64%;bottom:17%;}
+.story-screen[data-mood="reveal"] .story-character {filter:drop-shadow(0 0 44px #b100426b);}
+.story-caption {position:absolute; left:5%; right:5%; bottom:max(85px,calc(69px + env(safe-area-inset-bottom))); z-index:5;
+  min-height:124px; padding:18px 22px 23px;
+  border:1px solid #e2cb8b6f; border-top:2px solid #ffe09b99;
+  background:linear-gradient(125deg,#061c20ed,#081a1bf0 63%,#193126df);
+  box-shadow:0 18px 50px #000b,inset 0 0 42px #15574c30;
+  border-radius:9px;
+}
+.story-caption--enter {animation:story-caption-in .3s ease-out;}
+.story-speaker {font:700 14px/1.5 system-ui,sans-serif; color:#f2d286; letter-spacing:.08em; margin-bottom:4px;}
+.story-dialogue {font:400 clamp(16px,2.1vw,23px)/1.43 Georgia,serif; letter-spacing:.005em;
+  margin:0; min-height:45px; text-shadow:0 2px 4px #0009;
+}
+.story-hint {position:absolute; bottom:8px; right:13px; opacity:.62; letter-spacing:.12em;
+  font:600 9px/1 system-ui,sans-serif; color:#b5e5d0; animation:story-pulse 1.3s ease-in-out infinite;}
+.story-progress {position:absolute; bottom:70px;left:0; height:2px; background:linear-gradient(90deg,#6ac99f,#f6d68e);z-index:6;
+  box-shadow:0 0 16px #5ffbb7;transition:width .5s ease-out;}
+.story-toolbar {position:absolute; left:0; right:0; bottom:0; min-height:68px; z-index:6;
+  padding:9px max(10px,env(safe-area-inset-left)) max(9px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-right));
+  display:flex; justify-content:space-around; align-items:center; gap:6px; background:#030b10ec;
+}
+.story-toolbar button {min-height:42px;flex:1;border:1px solid #79988949;border-radius:7px;background:#12302c99;
+  font:600 11px/1.4 system-ui,sans-serif; color:#f0e9cb; padding:7px 5px;}
+.story-toolbar button:last-child {border-color:#cbb07379;color:#ffe0a6;}
+.story-toolbar button:active,.story-reward-actions button:active {transform:scale(.97);}
+.story-toolbar button:hover,.story-reward-actions button:hover {background:#32534a;}
+.story-toolbar button[aria-pressed="false"] {opacity:.75;}
+.story-complete .story-middle {inset:12% 6% 12%;pointer-events:auto; justify-content:center;}
+.story-reward {width:min(100%,580px);text-align:center;padding:35px 19px;
+  background:linear-gradient(155deg,#102f2eed,#0b171cf5);border:1px solid #b9a068a1;border-radius:20px;
+  box-shadow:0 25px 60px #000b,0 0 55px #9fc88827;}
+.story-reward-gem {font-size:70px;color:#baffc2; text-shadow:0 0 35px #64f8ad;animation:story-float 4s ease-in-out infinite;}
+.story-reward h1 {font-size:clamp(28px,5vw,40px);color:#f5e3a5;margin:8px 0 20px;}
+.story-reward p {font:600 12px/1.7 system-ui,sans-serif;letter-spacing:.13em;color:#e6d8a6;}
+.story-reward p:nth-of-type(2) {font:14px/1.6 system-ui,sans-serif;letter-spacing:normal;color:#d0e4dc;}
+.story-reward strong {display:block;margin:20px auto;color:#a8f1ba;}
+.story-reward small {display:block;color:#aaa89b;font:12px/1.6 system-ui,sans-serif;}
+.story-reward-actions {display:flex;gap:9px;justify-content:center;margin-top:22px;flex-wrap:wrap;}
+.story-reward-actions button {border:1px solid #d7bf84; padding:12px 16px;border-radius:8px;background:#23463e;}
+.story-reward-actions button:last-child {background:linear-gradient(120deg,#aa8a4a,#e4c780);color:#12221e;font-weight:700;}
+@keyframes story-pan {from{transform:scale(1.05) translate(-1%,0)}to{transform:scale(1.19) translate(1%,-2%)}}
+@keyframes story-rush {from{transform:scale(1.05)}to{transform:scale(1.28)}}
+@keyframes story-rise {from{transform:scale(1.16) translateY(3%)}to{transform:scale(1.05) translateY(-1%)}}
+@keyframes story-motes {from{background-position:14px 30px,80px 10px}to{background-position:35px -200px,115px -175px}}
+@keyframes story-enter {from{opacity:0;transform:translate(-50%,35px) scale(.94)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+@keyframes story-fade {from{opacity:0;letter-spacing:.5em}to{opacity:.8;letter-spacing:.3em}}
+@keyframes story-caption-in {from{opacity:.3;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes story-float {0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-9px)}}
+@keyframes story-pulse {50%{opacity:.25}}
+@media (min-width:700px) {
+  .story-frame {border-left:1px solid #9db6a32e;border-right:1px solid #9db6a32e;}
+  .story-character {width:360px;bottom:15%;}
+  .story-character[data-figure="boss"] {width:630px;}
+  .story-caption {left:12%;right:12%;}
+  .story-shot-label {padding-top:25px;}
+}
+@media (max-width:390px) {
+  .story-head {font-size:9px;letter-spacing:.12em;}
+  .story-character {width:78vw;}
+  .story-character[data-figure="boss"] {width:96vw;}
+  .story-caption {left:3%;right:3%;padding:13px 16px 20px;min-height:130px;}
+  .story-caption .story-dialogue {font-size:17px;}
+  .story-toolbar button {font-size:10px;min-height:43px;}
+}
+@media (prefers-reduced-motion: reduce) {
+  .story-screen *, .story-screen *::before, .story-screen *::after {animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+}
