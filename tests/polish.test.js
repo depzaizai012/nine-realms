@@ -18,6 +18,18 @@ import { createBattleController } from "../src/core/battle/battleController.js";
 import { createAutoBattleAdapter } from "../src/core/battle/autoBattleAdapter.js";
 import { swapped } from "../src/core/match3/boardUtils.js";
 import { STAGES } from "../src/data/stages/index.js";
+// Legacy fixture isolates original hero-specific combat expectations from the
+// new R/SR-only starter roster; production Stage 1-1 uses STARTER_HERO_IDS.
+const legacyStage = {
+  ...STAGES["1-1"],
+  team: [
+    "HERO_001_ARIA",
+    "HERO_002_FENRIR",
+    "HERO_003_ROWAN",
+    "HERO_004_SYLVA",
+    "HERO_005_PIP",
+  ],
+};
 const clean = () =>
   Array.from({ length: C.rows * C.cols }, (_, i) => ({
     id: i,
@@ -141,7 +153,7 @@ test("ultimate production fallback order and Sylva missing full body", () => {
   );
 });
 test("AUTO stays off, exposes legal moves / ready ultimates / generic targets and shared human APIs", () => {
-  const state = createBattle(STAGES["1-1"]);
+  const state = createBattle(legacyStage);
   state.board[0].specialType = "BOMB";
   const calls = [],
     controller = {
@@ -174,7 +186,7 @@ test("AUTO stays off, exposes legal moves / ready ultimates / generic targets an
   assert.equal(auto.useUltimate, controller.useUltimate);
 });
 test("ultimate locks input before its presentation and resolves real effects only at impact", async () => {
-  const state = createBattle(STAGES["1-1"]),
+  const state = createBattle(legacyStage),
     hero = state.heroes[0];
   hero.energy = 100;
   hero.hp = 300;
