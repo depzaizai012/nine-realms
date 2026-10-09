@@ -54,6 +54,30 @@ const specs = [
     "LIGHT_BOLT",
     { heal: 180, revive: 220, buff: 0.2 },
   ],
+  // Chapter II and IV heroes are available as Crystal Echoes before meeting
+  // their real counterparts. Their story appearances remain in later realms.
+  [
+    "EMBER",
+    "Ember",
+    "FIRE",
+    "MAGE",
+    "R",
+    760,
+    125,
+    "FIRE_SLASH",
+    { damage: 2.6 },
+  ],
+  [
+    "TIKO",
+    "Tiko",
+    "WOOD",
+    "WARRIOR",
+    "R",
+    870,
+    130,
+    "WOOD_LEAF_BOLT",
+    { damage: 2.7, crit: true },
+  ],
 ];
 export const HEROES = Object.fromEntries(
   specs.map((s, i) => {
@@ -77,6 +101,8 @@ export const HEROES = Object.fromEntries(
           "Stonebound Aegis",
           "Nether Bloom",
           "Celestial Renewal",
+          "Ember Spark",
+          "Oasis Thornblade",
         ][i],
       },
     ];
