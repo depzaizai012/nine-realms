@@ -9,6 +9,11 @@ export const MANIFEST = Object.fromEntries(
 );
 for (const [key, target] of Object.entries(ASSET_ALIASES))
   if (ASSET_CATALOG[target]) MANIFEST[key] = ASSET_CATALOG[target].url;
+  
+// Until commissioned matching full-body art is supplied, new starter Heroes
+// have distinct labelled preview portraits (never reuse another Hero's face).
+MANIFEST.HERO_006_EMBER_AVATAR = "/assets/starter/ember-preview.svg";
+MANIFEST.HERO_007_TIKO_AVATAR = "/assets/starter/tiko-preview.svg";
 export const getAssetMetadata = (key) =>
   ASSET_CATALOG[ASSET_ALIASES[key] || key];
 export const COMMON_HUD_ASSETS = Object.freeze([
