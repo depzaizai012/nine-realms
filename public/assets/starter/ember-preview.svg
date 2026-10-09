@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Ember, pháp sư hỏa tộc, minh họa tạm">
+<defs><radialGradient id="bg"><stop stop-color="#612f23"/><stop offset="1" stop-color="#0b161e"/></radialGradient><linearGradient id="flame" x1="0" y1="0" x2="0.3" y2="1"><stop stop-color="#ffed99"/><stop offset=".45" stop-color="#ff873b"/><stop offset="1" stop-color="#b22622"/></linearGradient><linearGradient id="robe"><stop stop-color="#672e28"/><stop offset=".5" stop-color="#282934"/><stop offset="1" stop-color="#171822"/></linearGradient></defs>
+<rect width="512" height="512" fill="url(#bg)"/><circle cx="256" cy="235" r="204" fill="#ec6b3424"/><circle cx="256" cy="240" r="154" fill="none" stroke="#efab7354" stroke-width="3" stroke-dasharray="9 20"/>
+<g fill="url(#flame)" opacity=".85"><path d="M65 450Q36 388 78 335Q77 390 115 391Q95 343 145 273Q126 359 167 418L147 480Z"/><path d="M393 470Q355 404 399 349Q408 412 445 413Q430 367 457 336Q489 417 451 476Z"/></g>
+<path d="M95 509Q111 381 171 334L344 337Q406 389 421 509Z" fill="url(#robe)" stroke="#a56145" stroke-width="7"/><path d="M133 505Q150 406 178 356L206 478L256 494L315 467L348 355Q390 426 390 510Z" fill="#2e2c35"/>
+<path d="M157 248Q147 134 220 109Q298 72 354 162L367 296L329 343L179 345Z" fill="#272633" stroke="#d77c4d" stroke-width="5"/>
+<path d="M192 232Q202 173 258 169Q315 173 329 232L314 312Q286 343 251 342Q219 336 194 310Z" fill="#a46f5a"/>
+<path d="M191 225Q200 159 252 149Q313 146 333 215Q296 206 267 176Q239 221 191 225Z" fill="#352a2c"/><path d="M213 258L242 259M278 259L304 257" stroke="#ffd18b" stroke-width="6" stroke-linecap="round"/>
+<path d="M231 302Q257 312 285 299" fill="none" stroke="#50353b" stroke-width="5"/><path d="M176 346L255 402L341 344" fill="none" stroke="#d47b48" stroke-width="9"/><path d="M239 392L254 369L273 394L256 424Z" fill="#ffc46b"/>
+<path d="M370 409L384 245" stroke="#d5b481" stroke-width="17" stroke-linecap="round"/><path d="M369 263Q338 209 380 175Q357 231 399 228Q384 178 415 148Q456 233 401 287Z" fill="url(#flame)" stroke="#ffde8a" stroke-width="3"/>
+<text x="256" y="492" font-family="serif" font-size="28" fill="#f5c28c" text-anchor="middle" font-weight="bold" stroke="#231517" stroke-width="3" paint-order="stroke">EMBER</text>
+</svg>

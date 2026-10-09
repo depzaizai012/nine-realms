@@ -20,6 +20,18 @@ import {
 import { createBattleController } from "../src/core/battle/battleController.js";
 import { STAGES } from "../src/data/stages/index.js";
 import { ELEMENTS } from "../src/data/elements/index.js";
+// Legacy fixture isolates original hero-specific combat expectations from the
+// new R/SR-only starter roster; production Stage 1-1 uses STARTER_HERO_IDS.
+const legacyStage = {
+  ...STAGES["1-1"],
+  team: [
+    "HERO_001_ARIA",
+    "HERO_002_FENRIR",
+    "HERO_003_ROWAN",
+    "HERO_004_SYLVA",
+    "HERO_005_PIP",
+  ],
+};
 const clean = () =>
   Array.from({ length: 42 }, (_, i) => ({
     id: i,
@@ -101,7 +113,7 @@ test("shuffle has moves and no matches", () => {
   assert.equal(findMatches(b).length, 0);
 });
 test("dead board automatically shuffles without turn, damage, or energy cost", async () => {
-  const s = createBattle(STAGES["1-1"]);
+  const s = createBattle(legacyStage);
   s.board = clean();
   const hp = s.heroes.map((h) => h.hp),
     energy = s.heroes.map((h) => h.energy);
@@ -127,7 +139,7 @@ test("deterministic four cascades still produce ONE turn and ONE sequential enem
   let seed = 279;
   const rng = () =>
     (seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0) / 4294967296;
-  const s = createBattle(STAGES["1-1"]);
+  const s = createBattle(legacyStage);
   s.board = createBoard(rng);
   s.enemies.forEach((e) => (e.hp = 100000));
   let clears = 0;
@@ -178,7 +190,7 @@ test("deterministic four cascades still produce ONE turn and ONE sequential enem
   assert.notEqual(enemyActions[0].target, enemyActions[1].target);
 });
 test("damage, energy, living target random selection, persistence", () => {
-  const s = createBattle(STAGES["1-1"]);
+  const s = createBattle(legacyStage);
   const h = s.heroes[1],
     enemy = s.enemies[0];
   const event = heroAttack(s, { element: "FIRE", count: 3 });
@@ -202,7 +214,7 @@ test("damage, energy, living target random selection, persistence", () => {
   assert.ok(s.enemies[2].elite);
 });
 test("ultimate healing, revive, shield, damage gated by full energy", () => {
-  const s = createBattle(STAGES["1-1"]);
+  const s = createBattle(legacyStage);
   const aria = s.heroes[0];
   aria.hp = 400;
   assert.equal(ultimate(s, aria).length, 0);
@@ -218,7 +230,7 @@ test("ultimate healing, revive, shield, damage gated by full energy", () => {
   assert.ok(s.heroes[0].shield > 0);
 });
 test("invalid gesture consumes zero turns/actions; cascades give one enemy phase and sequential actions", async () => {
-  const s = createBattle(STAGES["1-1"]);
+  const s = createBattle(legacyStage);
   s.enemies.forEach((e) => {
     e.hp = e.maxHp = 100000;
   });
