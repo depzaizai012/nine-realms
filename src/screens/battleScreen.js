@@ -119,9 +119,14 @@ export function mountBattle(app, stageId = "1-1", navigation = {}) {
       }
     },
     result(won, s) {
+      if (won) navigation.onVictory?.({
+        turns: s.turn,
+        heroesStanding: s.heroes.filter((hero) => hero.hp > 0).length,
+      });
       const dialog = root.querySelector(".result-dialog");
-      dialog.innerHTML = `<div class="dialog-mark">${won ? "✦" : "◇"}</div><p>STAGE ${s.stage.id} · ${s.stage.name}</p><h2>${won ? "The canopy awakens" : "The grove remembers"}</h2><p>${won ? "Victory · All three waves cleared" : "Your heroes have fallen. Try a new path."}</p><p>${s.turn} turns · ${s.heroes.filter((h) => h.hp > 0).length} heroes standing</p><button class="primary">Play again</button>`;
-      dialog.querySelector("button").onclick = () => navigation.onReplay?.();
+      dialog.innerHTML = `<div class="dialog-mark">${won ? "✦" : "◇"}</div><p>STAGE ${s.stage.id} · ${s.stage.name}</p><h2>${won ? "The canopy awakens" : "The grove remembers"}</h2><p>${won ? "Victory · All three waves cleared" : "Your heroes have fallen. Try a new path."}</p><p>${s.turn} turns · ${s.heroes.filter((h) => h.hp > 0).length} heroes standing</p><button class="primary">Play again</button><button class="stage-map-button">Stage Select</button>`;
+      dialog.querySelector(".primary").onclick = () => navigation.onReplay?.();
+      dialog.querySelector(".stage-map-button").onclick = () => navigation.onStageSelect?.();
       dialog.showModal();
     },
   };
