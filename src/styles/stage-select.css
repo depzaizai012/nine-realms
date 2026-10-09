@@ -271,3 +271,13 @@
 @media (prefers-reduced-motion: reduce) {
   .stage-node { transition: none; }
 }
+
+.town-screen .stage-select-link {
+  display: block;
+  margin-top: 14px;
+  color: #f6df9d;
+  font: 13px system-ui, sans-serif;
+  text-align: center;
+  text-decoration: underline;
+  cursor: pointer;
+}
