@@ -11,6 +11,10 @@ test.describe("Chapter I cinematic previews", () => {
     await page.getByRole("button", { name: /phát lại/i }).click();
     await expect(page.locator(".story-dialogue")).toContainText("Đừng");
     await page.getByRole("button", { name: /bỏ qua/i }).click();
+    await expect(page.getByRole("main", { name: "Triệu hồi tân thủ" })).toBeVisible();
+    await page.getByRole("button", { name: /triệu hồi 5 hero/i }).click();
+    await expect(page.locator(".starter-card.revealed")).toHaveCount(5);
+    await page.getByRole("button", { name: /vào trận 1-1/i }).click();
     await expect(page.getByRole("grid", { name: "Match three board" })).toBeVisible();
     await expect(page.locator(".story-screen")).toHaveCount(0);
   });
@@ -28,4 +32,17 @@ test.describe("Chapter I cinematic previews", () => {
     await page.getByRole("button", { name: /trở về màn 1-1/i }).click();
     await expect(page.getByRole("grid", { name: "Match three board" })).toBeVisible();
   });
+});
+
+test("standalone starter summon preview grants fixed R/SR team", async ({ page }) => {
+  await page.goto("/?summon=starter");
+  await expect(page.locator(".starter-card")).toHaveCount(5);
+  await page.getByRole("button", {name:/triệu hồi 5 hero/i}).click();
+  await expect(page.locator(".starter-card.revealed")).toHaveCount(5);
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("nine-realms:starter-roster:v1")));
+  expect(saved.heroIds).toEqual([
+    "HERO_003_ROWAN","HERO_006_EMBER","HERO_007_TIKO","HERO_004_SYLVA","HERO_005_PIP"
+  ]);
+  await page.getByRole("button", {name:/vào trận 1-1/i}).click();
+  await expect(page.getByRole("grid", { name: "Match three board" })).toBeVisible();
 });
