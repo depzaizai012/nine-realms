@@ -4,7 +4,7 @@ test("Replay during a killing ultimate exit cancels the old queue without stale 
 }) => {
   const errors = [];
   page.on("pageerror", (e) => errors.push(String(e)));
-  await page.goto("/");
+  await page.goto("/?screen=battle");
   await expect(page.locator(".hero-card")).toHaveCount(5);
   await page.evaluate(() => {
     const { state, view, controller } = window.__battle;
