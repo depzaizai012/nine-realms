@@ -1,7 +1,7 @@
 import { mountBattle } from "../screens/battleScreen.js";
 import { mountTown } from "../screens/townScreen.js";
 import { mountStageSelect } from "../screens/stageSelectScreen.js";
-import { completeStage } from "./campaign/campaignProgress.js";
+import { completeStage, nextStage } from "./campaign/campaignProgress.js";
 import { STAGES } from "../data/stages/index.js";
 export function createGameRouter(app) {
   let current,screen = "STAGE_SELECT", selectedStage = "1-1";
@@ -20,7 +20,7 @@ export function createGameRouter(app) {
       onResult:(won,state)=>{
         if(won)completeStage(id,1);
       },
-      onStageSelect:()=>showStageSelect(id),
+      onStageSelect:()=>showStageSelect(nextStage(id)||id),
     });
     return current;
   };
