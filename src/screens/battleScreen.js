@@ -119,9 +119,14 @@ export function mountBattle(app, stageId = "1-1", navigation = {}) {
       }
     },
     result(won, s) {
+      navigation.onResult?.(won, s);
       const dialog = root.querySelector(".result-dialog");
       dialog.innerHTML = `<div class="dialog-mark">${won ? "✦" : "◇"}</div><p>STAGE ${s.stage.id} · ${s.stage.name}</p><h2>${won ? "The canopy awakens" : "The grove remembers"}</h2><p>${won ? "Victory · All three waves cleared" : "Your heroes have fallen. Try a new path."}</p><p>${s.turn} turns · ${s.heroes.filter((h) => h.hp > 0).length} heroes standing</p><button class="primary">Play again</button>`;
       dialog.querySelector("button").onclick = () => navigation.onReplay?.();
+      const back = document.createElement("button");
+      back.textContent = "Stage Select";
+      back.onclick = () => navigation.onStageSelect?.();
+      dialog.append(back);
       dialog.showModal();
     },
   };
