@@ -6,5 +6,5 @@ import { installAssetFallbacks } from "./data/assets/manifest.js";
 installAssetFallbacks(document.querySelector("#app"));
 await preloadStage();
 const router = createGameRouter(document.querySelector("#app"));
-router.startBattle();
+router.showStageSelect();
 if (import.meta.env.DEV) window.__gameRouter = router;
