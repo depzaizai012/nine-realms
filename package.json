@@ -10,13 +10,16 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test tests/engine.test.js tests/polish.test.js tests/hud.test.js tests/controls.test.js tests/backgrounds.test.js",
+    "test": "node --test tests/engine.test.js tests/polish.test.js tests/hud.test.js tests/controls.test.js tests/backgrounds.test.js tests/auto-vfx.test.js",
     "test:browser": "playwright test",
     "assets:prepare": "node scripts/prepare-assets.js",
     "assets:scan": "node scripts/rescan-assets.js",
     "check:secrets": "node scripts/check-secrets.js",
     "check:deployment": "node scripts/check-deployment.js",
-    "test:production": "playwright test --config playwright.production.config.js"
+    "test:production": "playwright test --config playwright.production.config.js",
+    "vfx:scan": "node scripts/scan-vfx-packs.mjs",
+    "vfx:import": "node scripts/import-vfx-pack.mjs",
+    "vfx:runtime": "node scripts/install-vfx-runtime.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.0",
