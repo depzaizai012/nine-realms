@@ -7,8 +7,8 @@ test("VFX Studio previews, saves and exports without touching Battle state", asy
   await expect(page.getByRole("heading", { name: "Auto VFX Studio" })).toBeVisible();
   await expect(page.locator("[data-role='catalog'] button")).toHaveCount(9);
 
-  await page.locator("[data-role='duration']").fill("3000");
-  await page.locator("[data-role='scale']").fill("1.5");
+  await page.locator("[data-role='duration']").evaluate(el => { el.value = "3000"; el.dispatchEvent(new Event("input",{bubbles:true})); });
+  await page.locator("[data-role='scale']").evaluate(el => { el.value = "1.5"; el.dispatchEvent(new Event("input",{bubbles:true})); });
   await page.locator("[data-role='element']").selectOption("WOOD");
   await page.locator("[data-role='play']").click();
   await expect(page.locator(".vfx-studio__stage .auto-vfx")).toHaveCount(1);
