@@ -2,6 +2,7 @@ import { VFX_CONFIG as T, VFX_GEOMETRY as G } from "./vfxConfig.js";
 import { VFX_REGISTRY } from "./vfxRegistry.js";
 import { COLORS } from "../../data/elements/index.js";
 import { createUltimateView } from "../../components/hero/ultimateView.js";
+import { getClassBasicVfx } from "./autoVfxLibrary.js";
 
 export function createHeroActionVfx(ctx) {
   const {
@@ -17,6 +18,7 @@ export function createHeroActionVfx(ctx) {
     number,
     hitStop,
     shake,
+    playAuto = () => Promise.resolve(false),
   } = ctx;
   const identity = (hero) =>
     VFX_REGISTRY[hero.attackVfx] || {
@@ -173,6 +175,7 @@ export function createHeroActionVfx(ctx) {
         orbit(source, style.trail, color, T.normalHeroCharge),
       ]);
       await travel(source, target, style, color, T.normalHeroTravel);
+      void playAuto(getClassBasicVfx(hero), target, { element: event.element });
       if (style.impact === "fire") await hitStop(T.hitStop);
       await Promise.all([
         hit(target, event, { number: false, duration: T.normalHeroImpact }),
@@ -215,6 +218,7 @@ export function createHeroActionVfx(ctx) {
       y: bounds.top - game.top + bounds.height * 0.5,
     };
     const node = effect(`ultimate-power ${style.ultimate}`, p.x, p.y, color);
+    void playAuto("ULTIMATE_PULSE", presentation.art, { element: hero.element });
     const power = animate(
       node,
       [
