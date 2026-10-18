@@ -1,0 +1,39 @@
+/* Isolated, visual-only VFX primitives shared between Battle and VFX Studio. */
+.auto-vfx { position:absolute; width:70px; height:70px; pointer-events:none; z-index:7; transform-origin:center; opacity:0; display:block; will-change:transform,opacity; }
+.auto-vfx--slash { width:132px; height:35px; border-top:8px solid var(--vfx-color); border-radius:70% 80% 10% 10%; box-shadow:0 -10px 22px -5px var(--vfx-color), inset 0 9px 12px -9px #fff; filter:drop-shadow(0 0 6px #fff); }
+.auto-vfx--pulse { width:102px; height:102px; border:4px solid var(--vfx-color); border-radius:50%; box-shadow:0 0 18px var(--vfx-color),inset 0 0 22px var(--vfx-color); }
+.auto-vfx--orb { width:58px; height:58px; border-radius:50%; background:radial-gradient(circle,#fff 0 12%,var(--vfx-color) 35%,transparent 75%); box-shadow:0 0 29px 8px var(--vfx-color); }
+.auto-vfx--impact { width:90px; height:90px; border:6px dotted var(--vfx-color); border-radius:50%; background:radial-gradient(circle,#fff9,var(--vfx-color),transparent 65%); box-shadow:0 0 18px var(--vfx-color); }
+.auto-vfx--burst { width:165px; height:165px; border-radius:50%; background:repeating-conic-gradient(from 10deg,var(--vfx-color) 0deg 9deg, transparent 9deg 28deg); mask-image:radial-gradient(circle,transparent 10%,#000 18%,#000 45%,transparent 72%); filter:drop-shadow(0 0 12px var(--vfx-color)); }
+.auto-vfx--shield { width:95px; height:115px; clip-path:polygon(50% 0,94% 15%,91% 66%,50% 100%,9% 66%,6% 15%); border:6px solid var(--vfx-color); background:linear-gradient(160deg,#fff8,var(--vfx-color),#0003); box-shadow:0 0 25px var(--vfx-color); }
+.auto-vfx--heal { width:115px; height:115px; border:3px solid var(--vfx-color); border-radius:50%; background:linear-gradient(90deg,transparent 43%,var(--vfx-color) 43% 57%,transparent 57%),linear-gradient(0deg,transparent 43%,var(--vfx-color) 43% 57%,transparent 57%); box-shadow:0 0 22px var(--vfx-color); }
+.auto-vfx-canvas { position:absolute; width:100%;height:100%;inset:0;pointer-events:none;z-index:7; }
+.vfx-studio, .vfx-studio * { box-sizing:border-box; }
+.vfx-studio { --panel:#182a36; --line:#365160; --gold:#e9c47b; min-height:100dvh; overflow-y:auto; background:radial-gradient(ellipse at top,#263e4b 0%,#0d1a25 72%); font:14px/1.45 system-ui,sans-serif; color:#f6f1e8; padding:clamp(12px,3vw,30px); }
+.vfx-studio__header { max-width:1120px; margin:auto auto 18px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; }
+.vfx-studio h1 { font:normal clamp(25px,4vw,38px)/1.1 Georgia,serif; color:var(--gold); margin:4px 0; }
+.vfx-studio p { margin:5px 0; color:#bdcbd2; }
+.vfx-studio a { color:#f1d39c; }
+.vfx-studio__layout { max-width:1120px; margin:auto; display:grid; grid-template-columns:minmax(220px,290px) minmax(300px,1fr); gap:16px; }
+.vfx-studio__panel { border:1px solid var(--line); border-radius:16px; background:var(--panel); padding:15px; box-shadow:0 16px 44px #0003; }
+.vfx-studio__panel h2 { font:normal 21px Georgia,serif; margin:2px 0 14px; color:var(--gold); }
+.vfx-studio__catalog { max-height:600px; overflow:auto; display:grid; align-content:start; gap:7px; }
+.vfx-studio__item { color:#e0eff2; background:#203845; border:1px solid #3a5460; padding:11px; text-align:left; border-radius:10px; cursor:pointer; }
+.vfx-studio__item[aria-pressed="true"] { border-color:var(--gold); background:#334955; box-shadow:inset 3px 0 var(--gold); }
+.vfx-studio__item small { display:block;color:#9fc4ce; margin-top:2px; }
+.vfx-studio__stage { height:280px; border:1px solid #556679; border-radius:12px; background:radial-gradient(ellipse at center,#304758 0%,#12212f 55%,#0b1721 100%); position:relative; overflow:hidden; display:grid; place-items:center; }
+.vfx-studio__stage::before { content:""; position:absolute; width:72%; height:35%; bottom:2%; border-radius:50%; background:radial-gradient(ellipse,#68b9b72b,transparent 72%); }
+.vfx-studio__anchor { width:15px;height:15px; border:1px dashed #ffffff55;border-radius:50%; }
+.vfx-studio__stage .auto-vfx { z-index:2; }
+.vfx-studio__control-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:15px; }
+.vfx-studio__control { display:grid; gap:5px; font-size:13px; color:#c7dde5; }
+.vfx-studio select,.vfx-studio input { width:100%; padding:9px; background:#102430; color:#fff; border:1px solid #517081; border-radius:8px; }
+.vfx-studio input[type="range"] { accent-color:var(--gold); padding:8px 0; }
+.vfx-studio__actions { display:flex;flex-wrap:wrap; gap:8px;margin-top:17px; }
+.vfx-studio button { font:inherit; }
+.vfx-studio__action { color:#1c2831; border:0; border-radius:9px; background:var(--gold); padding:10px 17px; font-weight:700; cursor:pointer; }
+.vfx-studio__action.secondary { color:#f2e5cc; background:#334957; border:1px solid #67808c; }
+.vfx-studio__note { font-size:12px;color:#b7c9cf; overflow-wrap:anywhere; }
+.vfx-studio__status { color:#d4f2d0;min-height:22px; }
+@media (max-width:720px) { .vfx-studio__layout { grid-template-columns:1fr; } .vfx-studio__catalog { max-height:190px; } .vfx-studio__stage { height:240px; } }
+@media (prefers-reduced-motion:reduce) { .vfx-studio__item { scroll-behavior:auto; } }
