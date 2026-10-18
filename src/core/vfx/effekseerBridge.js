@@ -84,6 +84,7 @@ export function createEffekseerBridge(layer, state = {}) {
     if (!effect) {
       // Relative textures/materials stay resolvable from the copied pack.
       effect = await ctx.loadEffect(url);
+      if (stopped) { effect.release(); return false; }
       effects.set(url, effect);
     }
     const width = layer.clientWidth, height = layer.clientHeight;
