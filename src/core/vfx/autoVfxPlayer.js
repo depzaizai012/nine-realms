@@ -25,7 +25,7 @@ export function createAutoVfxPlayer(layer, state = {}, { animate } = {}) {
     const point = pointOf(target);
     if (!point) return false;
     const scale = Math.max(0.4, Math.min(3, Number(options.scale) || preset.scale || 1));
-    const duration = preset.duration || 400;
+    const duration = Math.max(100, Math.min(3000, Number(options.duration) || preset.duration || 400));
     if (preset.sourceType === "effekseer" && preset.url) {
       try {
         bridge ||= createEffekseerBridge(layer, state);
