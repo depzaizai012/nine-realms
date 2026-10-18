@@ -32,7 +32,8 @@ export function sanitizeVfxOverrides(candidate) {
   const safe = {};
   for (const [id, value] of Object.entries(candidate)) {
     if (!lookup.has(id) || !value || typeof value !== "object") continue;
-    const scale = Number(value.scale), duration = Number(value.duration);
+    const scale = value.scale === undefined ? NaN : Number(value.scale);
+    const duration = value.duration === undefined ? NaN : Number(value.duration);
     safe[id] = {
       ...(Number.isFinite(scale) ? { scale: Math.min(3, Math.max(0.4, scale)) } : {}),
       ...(Number.isFinite(duration) ? { duration: Math.round(Math.min(3000, Math.max(100, duration))) } : {}),
@@ -61,8 +62,34 @@ export function getVfxPreset(id, overrides = {}) {
   return preset ? { ...preset, ...(sanitizeVfxOverrides(overrides)[id] || {}) } : null;
 }
 
-export function getClassBasicVfx(hero) {
-  return BASIC_VFX_BY_CLASS[hero?.role ?? hero?.classId ?? hero?.class] || BASIC_VFX_BY_CLASS.MAGE;
+export const VFX_CLASS_MAPPING_KEY = "nine-realms-vfx-class-mappings-v1";
+export function sanitizeVfxClassMappings(candidate) {
+  const safe = {};
+  if (!candidate || typeof candidate !== "object" || Array.isArray(candidate)) return safe;
+  for (const role of Object.keys(BASIC_VFX_BY_CLASS)) {
+    if (typeof candidate[role] === "string" && lookup.has(candidate[role])) safe[role] = candidate[role];
+  }
+  return safe;
+}
+
+export function readVfxClassMappings(storage = typeof localStorage === "undefined" ? null : localStorage) {
+  if (!storage) return {};
+  try {
+    return sanitizeVfxClassMappings(JSON.parse(storage.getItem(VFX_CLASS_MAPPING_KEY) || "{}"));
+  } catch {
+    return {};
+  }
+}
+
+export function saveVfxClassMappings(mapping, storage = typeof localStorage === "undefined" ? null : localStorage) {
+  const safe = sanitizeVfxClassMappings(mapping);
+  storage?.setItem(VFX_CLASS_MAPPING_KEY, JSON.stringify(safe));
+  return safe;
+}
+
+export function getClassBasicVfx(hero, mapping = readVfxClassMappings()) {
+  const role = hero?.role ?? hero?.classId ?? hero?.class;
+  return mapping[role] || BASIC_VFX_BY_CLASS[role] || BASIC_VFX_BY_CLASS.MAGE;
 }
 
 export function getElementColor(element) {
