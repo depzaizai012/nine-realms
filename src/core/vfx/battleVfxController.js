@@ -4,6 +4,8 @@ import { COLORS } from "../../data/elements/index.js";
 import { createHeroActionVfx } from "./heroActionVfxController.js";
 import { createBoardVfx } from "./boardVfxController.js";
 import { createBattleClock } from "../battle/battleClock.js";
+import { createAutoVfxPlayer } from "./autoVfxPlayer.js";
+import "./auto-vfx.css";
 
 export function createVfx(root, state, boardView) {
   const layer = root.querySelector(".vfx-layer"),
@@ -11,6 +13,7 @@ export function createVfx(root, state, boardView) {
   const actor = (id) => root.querySelector(`[data-actor="${id}"]`);
   const clock = createBattleClock(state, root),
     { wait, animate } = clock;
+  const autoPlayer = createAutoVfxPlayer(layer, state, { animate });
   async function hitStop(duration) {
     const animations = root
       .getAnimations({ subtree: true })
@@ -122,6 +125,7 @@ export function createVfx(root, state, boardView) {
           : event.element === "LIGHT"
             ? "#ffe5a2"
             : "#9affbe";
+      void autoPlayer.play(event.kind === "shield" ? "SHIELD_AURA" : "HEAL_PULSE", target, { element: event.element });
       void particles(target, color, event.kind === "shield" ? "shield" : true, {
         duration: T.ultimateParticle,
       });
@@ -207,6 +211,7 @@ export function createVfx(root, state, boardView) {
         T.enemyAttack * 0.5,
       );
       projectile.remove();
+      void autoPlayer.play("ENEMY_STRIKE", to, { element: event.element });
       void particles(to, COLORS[event.element]);
       await hitStop(event.crit ? T.critStop : T.hitStop);
       await hit(to, event);
@@ -303,13 +308,14 @@ export function createVfx(root, state, boardView) {
     shake,
     playBoardShake: shake,
     playHitStop: hitStop,
+    playAuto: (id, target, opts) => autoPlayer.play(id, target, opts),
   };
   const heroVfx = createHeroActionVfx(ctx),
     boardVfx = createBoardVfx(ctx);
   return {
     wait,
     clock,
-    dispose: clock.dispose,
+    dispose: () => { autoPlayer.dispose(); clock.dispose(); },
     animate,
     attack,
     hit,
