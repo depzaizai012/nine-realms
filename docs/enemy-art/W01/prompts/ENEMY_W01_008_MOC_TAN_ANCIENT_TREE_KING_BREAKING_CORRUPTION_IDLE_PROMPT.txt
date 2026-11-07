@@ -1,0 +1,17 @@
+# ENEMY_W01_008_MOC_TAN_ANCIENT_TREE_KING_BREAKING_CORRUPTION_IDLE.png
+
+Canonical Enemy ID: ENEMY_W01_008_MOC_TAN_ANCIENT_TREE_KING
+Display name: Elderheart, Ancient Tree King
+Tier: BOSS | Element: WOOD | Visual blight intensity 2/5 (art scale, not gameplay).
+H scale guideline: 4.50–6.50H high × 3.80–6.20H wide (comparative only, NOT actor pixels).
+
+GAME: LEGEND OF THE NINE REALMS — W01 VERDANT REALM. Deliver exactly ONE production-candidate full-body IDLE enemy sprite, standalone, 1024×1024 transparent true-alpha PNG, front 3/4 battle angle and a stable lower-center foot/root/contact anchor. Mature premium painterly semi-realistic fantasy RPG; believable weight and rich tactile living forest materials. Ancient SACRED FOREST STILL ALIVE and partially threatened by selective corruption, NOT a dead withered forest. Old bark ≠ dead tree; darkness/venom/DARK gameplay element ≠ Void corruption. No generic demon armor, no toy-like mobile cartoon, no chibi or anime, no baby proportions, no plastic materials, no decorative flowers, no background, no floor/platform, no contact shadow, no HUD, no rings, no lettering, no sprite sheet, no attack/magic projectile/VFX baked into character. Strong silhouette readable at 120px. IDLE ONLY; ATTACK is not authorized until a specific IDLE is approved.
+
+ANATOMY / SILHOUETTE: Colossal sacred tree monarch: one ancient trunk, two massive pillar-root arms, two rooted leg clusters, asymmetrical branch crown.
+MATERIAL & PALETTE: Sound living hardwood, resilient old roots, deep living forest-green moss and canopy, localized dark sap and restrained dark-violet fissures along one shoulder/root only.
+THREE LOCKED IDENTITY MARKS: (1) Impassive bark-mask face; (2) triple-lobed green-gold seed-heart chest core; (3) broken LEFT crown antler.
+EXACT IDLE WEIGHT & CAMERA: Majestic stillness with head inclining down, triangular shoulders/arms and heavy rooted base, no active spell.
+REJECT: Dead leafless log, uniformly brown, smiling grandpa tree, purple floral crown, full-body neon corruption.
+SAME EXACT Elderheart as approved CORRUPTED IDLE reference: identical bark mask, broken LEFT antler, triple-lobed core, root anatomy, camera and anchor. Corruption level 2/5; infection cracking off, substantial vigorous green canopy returning. No re-sculpt of character.
+
+Treat these specifications as art-only. Roster IDs, tier and element unchanged. No skill balance/HP phase triggers modified. Export this IDLE in isolation; no ATTACK.
