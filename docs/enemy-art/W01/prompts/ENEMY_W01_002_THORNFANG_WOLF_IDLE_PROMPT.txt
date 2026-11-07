@@ -1,0 +1,17 @@
+# ENEMY_W01_002_THORNFANG_WOLF_IDLE.png
+
+Canonical Enemy ID: ENEMY_W01_002_THORNFANG_WOLF
+Display name: Thornfang Wolf
+Tier: NORMAL | Element: WOOD | Visual blight intensity 0/5 (art scale, not gameplay).
+H scale guideline: 0.75–0.95H high × 1.55–1.95H wide (comparative only, NOT actor pixels).
+
+GAME: LEGEND OF THE NINE REALMS — W01 VERDANT REALM. Deliver exactly ONE production-candidate full-body IDLE enemy sprite, standalone, 1024×1024 transparent true-alpha PNG, front 3/4 battle angle and a stable lower-center foot/root/contact anchor. Mature premium painterly semi-realistic fantasy RPG; believable weight and rich tactile living forest materials. Ancient SACRED FOREST STILL ALIVE and partially threatened by selective corruption, NOT a dead withered forest. Old bark ≠ dead tree; darkness/venom/DARK gameplay element ≠ Void corruption. No generic demon armor, no toy-like mobile cartoon, no chibi or anime, no baby proportions, no plastic materials, no decorative flowers, no background, no floor/platform, no contact shadow, no HUD, no rings, no lettering, no sprite sheet, no attack/magic projectile/VFX baked into character. Strong silhouette readable at 120px. IDLE ONLY; ATTACK is not authorized until a specific IDLE is approved.
+
+ANATOMY / SILHOUETTE: Adult quadrupedal forest wolf, long low neck, powerful sloping shoulders, muscular haunches and anatomically credible paws.
+MATERIAL & PALETTE: Healthy rough gray-brown fur, scarred muzzle, living bark-thorns attached around one shoulder, sparse healthy moss foliage.
+THREE LOCKED IDENTITY MARKS: (1) One exposed fang; (2) thorn ridge biased toward RIGHT shoulder; (3) coarse tail with ragged outline.
+EXACT IDLE WEIGHT & CAMERA: Front paws braced low, jaws only slightly parted, 3/4 gaze toward player, ready but not lunging.
+REJECT: Puppy proportions, wilted leaf cloak, dead bark, purple infection, big glowing eyes.
+
+
+Treat these specifications as art-only. Roster IDs, tier and element unchanged. No skill balance/HP phase triggers modified. Export this IDLE in isolation; no ATTACK.

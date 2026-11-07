@@ -1,0 +1,7 @@
+# BLOCKED / DEFERRED — Elderheart RESTORED
+
+**DO NOT GENERATE USING THE ORDINARY ENEMY SPRITE PIPELINE.** This former 1024×1024, 3/4 Enemy IDLE prompt is superseded by `docs/enemy-art/BOSS_FULLSCREEN_PRESENTATION_RULE_V1.0.md`.
+
+Boss phase: RESTORED. Visual corruption level: 0/5. Identity remains: bark mask, triple-lobed seed-heart, broken LEFT branch antler, pillar-like root anatomy; same single character across phases.
+
+Future asset: **large front-facing cinematic combat-boss character, filling the Boss encounter viewport, directly confronting Heroes; composition, exact dimensions, art layers and HUD safe zones to be established and owner-approved separately.** Do not render now; no ATTACK or other phase generation authorized.

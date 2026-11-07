@@ -1,0 +1,17 @@
+# ENEMY_W01_004_VENOMROOT_SPIDER_IDLE.png
+
+Canonical Enemy ID: ENEMY_W01_004_VENOMROOT_SPIDER
+Display name: Venomroot Spider
+Tier: ELITE | Element: DARK | Visual blight intensity 1/5 (art scale, not gameplay).
+H scale guideline: 0.60–0.88H high × 1.60–2.18H wide (comparative only, NOT actor pixels).
+
+GAME: LEGEND OF THE NINE REALMS — W01 VERDANT REALM. Deliver exactly ONE production-candidate full-body IDLE enemy sprite, standalone, 1024×1024 transparent true-alpha PNG, front 3/4 battle angle and a stable lower-center foot/root/contact anchor. Mature premium painterly semi-realistic fantasy RPG; believable weight and rich tactile living forest materials. Ancient SACRED FOREST STILL ALIVE and partially threatened by selective corruption, NOT a dead withered forest. Old bark ≠ dead tree; darkness/venom/DARK gameplay element ≠ Void corruption. No generic demon armor, no toy-like mobile cartoon, no chibi or anime, no baby proportions, no plastic materials, no decorative flowers, no background, no floor/platform, no contact shadow, no HUD, no rings, no lettering, no sprite sheet, no attack/magic projectile/VFX baked into character. Strong silhouette readable at 120px. IDLE ONLY; ATTACK is not authorized until a specific IDLE is approved.
+
+ANATOMY / SILHOUETTE: Ground-hugging elite forest hunter with exactly eight sharp jointed legs, flat armored abdomen and root-horn tibial ends.
+MATERIAL & PALETTE: Healthy dark matte chitin, moss and root tracery, small deep violet natural venom sacs, at most one faint blight blemish.
+THREE LOCKED IDENTITY MARKS: (1) Four small asymmetrically grouped eyes; (2) two downward fangs; (3) root-vein ridges along abdomen.
+EXACT IDLE WEIGHT & CAMERA: Low center of mass, forward legs lifted just enough to threaten, belly not shriveled.
+REJECT: Neon purple body, massive eyes, dead-paper shell, fantasy armor and spiderweb VFX.
+
+
+Treat these specifications as art-only. Roster IDs, tier and element unchanged. No skill balance/HP phase triggers modified. Export this IDLE in isolation; no ATTACK.
